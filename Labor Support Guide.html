@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="color-scheme" content="light"/>
+<title>Labor Support Guide</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light}
+html,body{background:#FAFAF7;color:#0F172A;font-family:ui-monospace,monospace;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+button{font-family:inherit;cursor:pointer}a{text-decoration:none}
+input[type=range]{-webkit-appearance:none;appearance:none;height:5px;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#0F172A;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin-top:-6.5px}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#0F172A;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2)}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes toastUp{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* Layout */
+#app{min-height:100vh}
+#header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #E5E7EB;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#header h1{font-family:ui-serif,Georgia,serif;font-size:19px;font-weight:500;letter-spacing:-0.01em;color:#0F172A}
+#header-sub{font-size:10px;color:#94A3B8;letter-spacing:0.07em;margin-top:1px}
+
+.main-grid{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 60px)}
+.input-col{border-right:1px solid #E5E7EB;padding:20px 18px;background:#fff;overflow-y:auto;max-height:calc(100vh - 60px)}
+.recs-col{padding:28px 32px;overflow-y:auto;max-height:calc(100vh - 60px);background:#FAFAF7}
+
+/* Inputs */
+.param-label{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#64748B}
+.param-sub{font-size:10px;color:#94A3B8;margin-top:2px}
+.param-val{font-family:ui-serif,Georgia,serif;font-size:20px;font-weight:700;color:#0F172A}
+.slider-wrap{position:relative;height:5px;background:#E2E8F0;border-radius:3px;margin:8px 0 4px}
+.slider-fill{position:absolute;left:0;top:0;height:100%;border-radius:3px;transition:width 0.12s;pointer-events:none}
+.slider-wrap input{position:absolute;left:0;top:-8px;width:100%;opacity:0;height:20px;margin:0}
+.slider-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.slider-block{margin-bottom:20px}
+.pills-label{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#64748B;margin-bottom:8px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.pill{padding:7px 12px;border-radius:8px;border:1px solid #E2E8F0;background:#fff;color:#64748B;font-size:11px;letter-spacing:0.04em;transition:all 0.15s;white-space:nowrap}
+.pill.active{font-weight:500}
+.phase-box{border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.alert-box{border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:11px;line-height:1.55}
+.source-note{margin-top:18px;padding-top:14px;border-top:1px solid #E5E7EB;font-size:10px;color:#94A3B8;line-height:1.65}
+
+/* Category cards */
+.cat-card{display:block;width:100%;text-align:left;padding:22px 24px;background:#fff;border:1px solid #E5E7EB;border-radius:14px;margin-bottom:14px;transition:all 0.18s;font-family:inherit}
+.cat-card:hover{transform:translateY(-2px)}
+.cat-icon-wrap{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.cat-title{font-family:ui-serif,Georgia,serif;font-size:20px;font-weight:600;color:#0F172A;line-height:1.2}
+.cat-count{font-size:11px;color:#64748B;margin-top:2px}
+.cat-summary{font-size:12.5px;color:#475569;line-height:1.6;margin-top:10px}
+
+/* Side panel */
+#panel-backdrop{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.35);z-index:40;animation:fadeIn 0.2s}
+#side-panel{display:none;position:fixed;top:0;right:0;height:100vh;width:520px;background:#fff;border-left:1px solid #E5E7EB;z-index:50;overflow-y:auto;box-shadow:-12px 0 30px rgba(15,23,42,0.08);animation:slideIn 0.25s ease-out;flex-direction:column}
+#side-panel.open{display:flex}
+#panel-header{position:sticky;top:0;background:#fff;border-bottom:1px solid #E5E7EB;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:5;flex-shrink:0}
+#panel-close{width:34px;height:34px;border-radius:8px;border:1px solid #E5E7EB;background:#fff;font-size:16px;color:#64748B;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
+#panel-close:hover{background:#F1F5F9;border-color:#CBD5E1}
+#panel-back{display:flex;align-items:center;gap:7px;background:none;border:none;color:#64748B;font-size:11px;font-family:inherit;letter-spacing:0.05em;padding:0;text-transform:uppercase}
+#panel-back:hover{color:#0F172A}
+#panel-cat-label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:3px}
+#panel-title{font-family:ui-serif,Georgia,serif;font-size:20px;font-weight:600;color:#0F172A;line-height:1.2}
+#panel-body{padding:20px;overflow-y:auto;flex:1}
+
+/* List items */
+.list-item{display:block;width:100%;text-align:left;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:all 0.15s;font-family:inherit}
+.list-item:hover{transform:translateY(-1px)}
+.list-item-name{font-family:ui-serif,Georgia,serif;font-size:14px;font-weight:600;color:#0F172A;line-height:1.3;flex:1 1 140px}
+.list-item-desc{font-size:12.5px;color:#475569;line-height:1.65;margin-top:6px}
+.list-item-tap{margin-top:8px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase}
+.badge{display:inline-flex;align-items:center;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap}
+.badges{display:flex;gap:5px;flex-wrap:wrap}
+.list-header-note{border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;line-height:1.55}
+
+/* Detail view */
+.detail-illus{border-radius:12px;padding:18px;margin-bottom:20px;height:210px;display:flex;align-items:center;justify-content:center}
+.detail-illus svg{width:100%;height:100%;shape-rendering:geometricPrecision;text-rendering:optimizeLegibility}
+.detail-section-label{font-size:10px;color:#64748B;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px}
+.detail-overview{font-size:13px;line-height:1.65;color:#334155;margin-bottom:22px}
+.step-li{position:relative;padding-left:32px;margin-bottom:10px;font-size:12.5px;line-height:1.6;color:#334155}
+.step-num{position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.pearl-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.pearl-item:last-child{margin-bottom:0}
+.pearl-text{font-size:12.5px;line-height:1.55;color:#334155}
+.caution-box{background:#FEF3C7;border:1px solid #FCD34D;border-radius:10px;padding:12px 14px;margin-bottom:22px}
+.caution-label{font-size:10px;color:#92400E;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:5px}
+.caution-text{font-size:12px;line-height:1.6;color:#78350F}
+.evidence-block{border-left-width:3px;border-left-style:solid;border-radius:4px;background:#F8FAFC;padding:12px 14px;font-size:12px;font-style:italic;color:#475569;line-height:1.65;margin-bottom:22px}
+.res-link{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid #E5E7EB;border-radius:8px;margin-bottom:6px;font-size:12px;color:#334155;transition:all 0.15s}
+.res-link:hover{background:#F8FAFC}
+
+/* Toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0F172A;color:#fff;padding:10px 18px;border-radius:8px;font-size:12px;letter-spacing:0.04em;z-index:100;box-shadow:0 6px 16px rgba(15,23,42,0.25);animation:toastUp 0.2s ease-out;display:none;white-space:nowrap}
+
+/* Tip box */
+.tip-box{padding:13px 16px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;font-size:11.5px;color:#166534;line-height:1.6;margin-top:8px}
+
+/* Mobile */
+#mobile-toggle{display:none;width:100%;justify-content:space-between;align-items:center;background:none;border:none;padding:0;color:#64748B;margin-bottom:12px}
+#mobile-toggle span.chevron{font-size:18px;transition:transform 0.2s;display:inline-block}
+/* Fix 1: removed #panel-backdrop{display:block} — JS controls visibility via showPanel/closePanel */
+@media(max-width:1100px){#side-panel{width:460px}}
+@media(max-width:720px){
+  .main-grid{grid-template-columns:1fr;min-height:unset}
+  .input-col{border-right:none;border-bottom:1px solid #E5E7EB;padding:14px;max-height:unset;overflow-y:visible}
+  .recs-col{padding:16px;max-height:unset;overflow-y:visible}
+  #mobile-toggle{display:flex}
+  #side-panel{width:100%}
+  .recs-col h2{font-size:20px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <div>
+      <h1>Labor Support Guide</h1>
+      <div id="header-sub">EVIDENCE-BASED POSITIONING &amp; COMFORT</div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="input-col">
+      <button id="mobile-toggle" onclick="toggleInputs()">
+        <span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase">Clinical Parameters</span>
+        <span class="chevron" id="chevron">⌄</span>
+      </button>
+      <div id="inputs-body">
+        <!-- Dilation -->
+        <div class="slider-block">
+          <div class="slider-row">
+            <div><div class="param-label">Dilation</div><div class="param-sub" id="dil-sub">Latent phase</div></div>
+            <div class="param-val" id="dil-val">4 cm</div>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-fill" id="dil-fill" style="background:linear-gradient(90deg,#0F766E,#0F766E)"></div>
+            <input type="range" min="0" max="10" step="1" value="4" id="dil" oninput="updateDilation(this.value)">
+          </div>
+        </div>
+        <!-- Effacement -->
+        <div class="slider-block">
+          <div class="slider-row">
+            <div><div class="param-label">Effacement</div><div class="param-sub" id="eff-sub">Mostly effaced</div></div>
+            <div class="param-val" id="eff-val">60%</div>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-fill" id="eff-fill" style="background:linear-gradient(90deg,#0F766E,#0F766E)"></div>
+            <input type="range" min="0" max="100" step="5" value="60" id="eff" oninput="updateEffacement(this.value)">
+          </div>
+        </div>
+        <!-- Station -->
+        <div class="slider-block">
+          <div class="slider-row">
+            <div><div class="param-label">Station</div><div class="param-sub" id="sta-sub">Engaged / Mid</div></div>
+            <div class="param-val" id="sta-val">-2</div>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-fill" id="sta-fill" style="background:linear-gradient(90deg,#0F766E,#0F766E)"></div>
+            <input type="range" min="-5" max="5" step="1" value="-2" id="sta" oninput="updateStation(this.value)">
+          </div>
+        </div>
+        <!-- Epidural -->
+        <div class="pills-label">Epidural</div>
+        <div class="pills" id="pills-ep">
+          <button class="pill active" data-val="0" onclick="setPill('ep',0,this)" style="border-color:#0F766E;background:#0F766E14;color:#0F766E">No Epidural</button>
+          <button class="pill" data-val="1" onclick="setPill('ep',1,this)">Epidural</button>
+        </div>
+        <!-- Fetal Position -->
+        <div class="pills-label">Fetal Position</div>
+        <div class="pills" id="pills-fp">
+          <button class="pill active" data-val="OA" onclick="setPill('fp','OA',this)" style="border-color:#059669;background:#05996914;color:#059669">OA ✓</button>
+          <button class="pill" data-val="OP" onclick="setPill('fp','OP',this)">OP 🔄</button>
+          <button class="pill" data-val="OT" onclick="setPill('fp','OT',this)">OT ↔</button>
+          <button class="pill" data-val="asynclitic" onclick="setPill('fp','asynclitic',this)">Asynclitic ⟂</button>
+        </div>
+        <!-- Contractions -->
+        <div class="pills-label">Contractions</div>
+        <div class="pills" id="pills-cx">
+          <button class="pill" data-val="mild" onclick="setPill('cx','mild',this)">Mild</button>
+          <button class="pill active" data-val="moderate" onclick="setPill('cx','moderate',this)" style="border-color:#C2410C;background:#C2410C14;color:#C2410C">Moderate</button>
+          <button class="pill" data-val="strong" onclick="setPill('cx','strong',this)">Strong</button>
+        </div>
+        <!-- Phase box -->
+        <div class="phase-box" id="phase-box"></div>
+        <!-- Alerts -->
+        <div id="ep-alert" class="alert-box" style="display:none;background:#FEF3C7;border:1px solid #FCD34D;color:#92400E">⚠ Mobility-limited options shown. Peanut ball strongly recommended.</div>
+        <div id="complete-alert" class="alert-box" style="display:none;background:#FCE7F3;border:1px solid #F9A8D4;color:#9D174D">💡 <strong>Complete but unengaged.</strong> Consider passive descent — await Ferguson reflex (ACOG 2019).</div>
+        <div id="cx-box" class="alert-box"></div>
+        <div class="source-note">Sources: Cochrane Reviews (Lawrence 2013, Gupta 2017, Cluett 2018, Bohren 2017, Aasheim 2012, Hutton 2012, Dowswell 2011); ACOG Practice Bulletins; AWHONN EBP Guidelines; Lamaze International; Simkin &amp; Ancheta, Labor Progress Handbook (4th ed.); Roth et al. JOGNN 2016; Spinning Babies / Gail Tully; Evidence Based Birth (Dekker).</div>
+      </div>
+    </div>
+
+    <div class="recs-col">
+      <div id="fp-banner" style="display:none;border-radius:12px;padding:14px 18px;margin-bottom:20px"></div>
+      <div style="margin-bottom:18px">
+        <h2 style="font-family:ui-serif,Georgia,serif;font-size:24px;font-weight:600;color:#0F172A;letter-spacing:-0.01em">Recommended Support</h2>
+        <div style="font-size:12px;color:#64748B;margin-top:3px">Tap a category to explore evidence-based recommendations</div>
+      </div>
+      <button class="cat-card" id="cat-pos" onclick="openCategory('pos')">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div class="cat-icon-wrap" id="cat-pos-icon">🤰</div>
+            <div><div class="cat-title">Positions &amp; Movement</div><div class="cat-count" id="cat-pos-count"></div></div>
+          </div>
+          <div style="font-size:20px" id="cat-pos-arrow">→</div>
+        </div>
+        <div class="cat-summary" id="cat-pos-summary"></div>
+      </button>
+      <button class="cat-card" id="cat-br" onclick="openCategory('br')">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div class="cat-icon-wrap" id="cat-br-icon">🌬</div>
+            <div><div class="cat-title">Breathing</div><div class="cat-count" id="cat-br-count"></div></div>
+          </div>
+          <div style="font-size:20px" id="cat-br-arrow">→</div>
+        </div>
+        <div class="cat-summary" id="cat-br-summary"></div>
+      </button>
+      <button class="cat-card" id="cat-co" onclick="openCategory('co')">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div class="cat-icon-wrap" id="cat-co-icon">🫧</div>
+            <div><div class="cat-title">Comfort Measures</div><div class="cat-count" id="cat-co-count"></div></div>
+          </div>
+          <div style="font-size:20px" id="cat-co-arrow">→</div>
+        </div>
+        <div class="cat-summary" id="cat-co-summary"></div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Side panel -->
+  <div id="panel-backdrop" onclick="closePanel()"></div>
+  <div id="side-panel">
+    <div id="panel-header">
+      <div id="panel-header-left">
+        <div id="panel-cat-label"></div>
+        <div id="panel-title"></div>
+      </div>
+      <button id="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div id="panel-body"></div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────
+var PHASES={
+  latent:{label:'Latent Phase',range:'0–6 cm',color:'#0F766E',
+    positions:[
+      {name:'Walking / Upright',description:'Ambulation uses gravity to promote fetal descent and cervical change. Even slow walking is beneficial.',evidence:'Cochrane 2013 (Lawrence et al.) — upright associated with ~1.36 hr shorter first stage, reduced epidural requests.',priority:'high',epiduralSafe:false},
+      {name:'Birth Ball Sitting',description:'Pelvic rocking on a birth ball encourages optimal fetal positioning and relieves sacral pressure.',evidence:'AWHONN & Cochrane support birth ball as effective non-pharmacological comfort measure.',priority:'high',epiduralSafe:false},
+      {name:'Left Lateral Recumbent',description:'Optimal for uterine perfusion. Useful for rest. Reduces aortocaval compression.',evidence:'ACOG recommends left lateral tilt to optimize uteroplacental perfusion.',priority:'medium',epiduralSafe:true},
+      {name:'Semi-Recumbent (HOB 30–45°)',description:'Comfortable for monitoring. Maintains partial upright benefit over supine.',evidence:'Lamaze International Healthy Birth Practices #2.',priority:'medium',epiduralSafe:true}
+    ],
+    movements:[
+      {name:'Pelvic Circles / Figure-8',description:'On birth ball or standing. Promotes fetal rotation, reduces back pain.',epiduralSafe:false},
+      {name:'Slow Dancing (Partner Sway)',description:'Upright rhythmic movement with counter-pressure. Combines gravity and comfort.',epiduralSafe:false},
+      {name:'Hip Shifts on Birth Ball',description:'Side-to-side hip rocking encourages descent and relieves pressure.',epiduralSafe:false},
+      {name:'Repositioning q30 min',description:'Systematic position changes maintain benefits of varied positioning.',epiduralSafe:true}
+    ],
+    breathing:[
+      {name:'Slow-Paced Breathing (6–10/min)',description:'Diaphragmatic breathing throughout contraction. Inhale 4 counts, exhale 6 counts. Primary technique for latent phase.',source:'Lamaze'},
+      {name:'Relaxation Breathing',description:'Focus on jaw, shoulder, hand relaxation with each exhale. Conserves energy for active labor.',source:'AWHONN'}
+    ],
+    comfort:[
+      {name:'Hydrotherapy',description:'Warm water significantly reduces pain and promotes relaxation.',evidence:'Cochrane 2018 (Cluett et al.) — reduced epidural use with water immersion.'},
+      {name:'Bilateral Sacral Counter-Pressure',description:'Firm bilateral pressure during contractions. Especially effective with posterior presentation.',evidence:'Evidence Based Birth 2014.'},
+      {name:'Heat / Cold Therapy',description:'Warm compresses to lower back or cold to perineum between contractions.',evidence:'AWHONN evidence-based practice guidelines.'}
+    ]
+  },
+  active:{label:'Active Phase',range:'6–10 cm',color:'#C2410C',
+    positions:[
+      {name:'Hands and Knees',description:'Reduces sacral pressure. Widens pelvic inlet. Strongly recommended for back labor.',evidence:'Simkin & Ancheta; reduces augmentation need with posterior position.',priority:'high',epiduralSafe:true},
+      {name:'Squatting / Supported Squat',description:'Increases pelvic outlet by up to 28%. Promotes rapid descent.',evidence:'Cochrane 2017 (Gupta et al.) — shorter 2nd stage, less instrumental delivery.',priority:'high',epiduralSafe:false},
+      {name:'Lunge (Asymmetric Stance)',description:'One foot elevated. Asymmetric pelvic opening encourages fetal rotation.',evidence:'Spinning Babies / Simkin — for asynclitism and OP correction.',priority:'high',epiduralSafe:false},
+      {name:'Side-Lying with Peanut Ball',description:'Mimics squat with epidural. Significantly shortens labor duration.',evidence:'Roth et al. 2016 (JOGNN) — reduced 1st stage by 89 min in epidural patients.',priority:'high',epiduralSafe:true}
+    ],
+    movements:[
+      {name:'Stair Climbing / Curb Walking',description:'Asymmetric hip movement widens pelvis, promotes descent and rotation.',epiduralSafe:false},
+      {name:'Hip Squeeze During Contractions',description:'Partner applies firm bilateral iliac crest pressure. Reduces sacral pain.',epiduralSafe:true},
+      {name:'Abdominal Lift',description:'Lift lower abdomen upward and inward during contraction. Corrects asynclitism.',epiduralSafe:false},
+      {name:'Peanut Ball Side Alternation',description:'Alternate peanut ball side every 30–60 min for position variety.',epiduralSafe:true}
+    ],
+    breathing:[
+      {name:'Modified-Paced Breathing',description:'Slightly faster (~6–9/min). Inhale through nose, exhale through pursed lips.',source:'Lamaze'},
+      {name:'Low Vocalization / Toning',description:'Low-pitched moaning relaxes pelvic floor and reduces pain perception.',source:'AWHONN'},
+      {name:'4-7-8 Between Contractions',description:'Inhale 4, hold 7, exhale 8. Activates parasympathetic response. Use in intervals only.',source:'Evidence Based Birth'}
+    ],
+    comfort:[
+      {name:'TENS Unit (Lower Back)',description:'Most effective when started in early labor. Modest pain reduction.',evidence:'Cochrane 2011 (Dowswell et al.) — modest pain reduction, high satisfaction.'},
+      {name:'Sterile Water Injections',description:'4 intradermal injections bilaterally on sacrum. Highly effective for back labor (OP).',evidence:'Cochrane 2012 (Hutton et al.) — significant reduction in back pain scores.'},
+      {name:'Continuous Doula Support',description:'Reduces cesarean rates, epidural requests, oxytocin use.',evidence:'Cochrane 2017 (Bohren et al.) — 25% reduction in CS, 10% reduction in instrumental delivery.'}
+    ]
+  },
+  pushing:{label:'2nd Stage / Pushing',range:'10 cm, station ≥ 0',color:'#9D174D',
+    positions:[
+      {name:'Squatting / Birth Stool',description:'Maximal pelvic outlet expansion (+28%). Gravity-assisted.',evidence:'Cochrane 2017 (Gupta et al.).',priority:'high',epiduralSafe:false},
+      {name:'Side-Lying (Left or Right)',description:'Reduces perineal laceration vs. semi-recumbent. Useful for rapid descent.',evidence:'Cochrane 2017 — lower episiotomy rates with lateral position.',priority:'high',epiduralSafe:true},
+      {name:'Hands and Knees for Pushing',description:'Reduces severe perineal tears. Useful for persistent OP.',evidence:'Cochrane 2017; RCOG guidelines.',priority:'medium',epiduralSafe:true},
+      {name:'Supported Half-Squat (Squat Bar)',description:'Semi-squat with bar. Combines gravity with epidural accommodation.',evidence:'AWHONN position statement on second stage.',priority:'medium',epiduralSafe:true}
+    ],
+    movements:[
+      {name:'Tug-of-War (Sheet or Partner)',description:'Pulling toward center while bearing down amplifies pushing force.',epiduralSafe:true},
+      {name:'Physiologic / Delayed Pushing',description:'Await Ferguson reflex before directed pushing. Reduces exhaustion.',epiduralSafe:true},
+      {name:'Position Changes Between Pushes',description:'Alternate positions to aid rotation, especially OP or asynclitism.',epiduralSafe:false}
+    ],
+    breathing:[
+      {name:'Open-Glottis Pushing (Exhale-Push)',description:'Bear down while exhaling. More physiologic than Valsalva. Reduces pelvic floor strain.',source:'ACOG / AWHONN'},
+      {name:'Directed Valsalva',description:'10-second breath holds. Use selectively for Cat II/III FHR or rapid delivery need.',source:'ACOG #147'},
+      {name:'Breathing Baby Down',description:'Breathe down into pelvis without active push between contractions. Allows gradual descent.',source:'Lamaze HBP #5'}
+    ],
+    comfort:[
+      {name:'Warm Perineal Compresses',description:'Significantly reduces 3rd/4th degree lacerations during crowning.',evidence:'Cochrane 2012 (Aasheim et al.) — NNT ~16 to prevent one severe tear.'},
+      {name:'Perineal Massage During Crowning',description:'Digital stretching of posterior fourchette during active crowning.',evidence:'Cochrane 2012 (Aasheim et al.).'}
+    ]
+  }
+};
+
+// Fix 2: added epiduralSafe to all additionalRecs entries
+var FP_DATA={
+  OA:{label:'Occiput Anterior',color:'#059669',icon:'✓',summary:'Optimal fetal positioning. Standard phase-based recommendations apply.',priorityPositions:[],additionalRecs:[],comfortRecs:[]},
+  OP:{label:'Occiput Posterior',color:'#EA580C',icon:'🔄',summary:'Back labor pattern. Fetal spine against maternal spine. Rotation to OA is the goal.',
+    priorityPositions:['Hands and Knees','Lunge (Asymmetric Stance)','Hands and Knees for Pushing'],
+    additionalRecs:[
+      {name:'Hands and Knees + Pelvic Rocking',description:'Most effective position for OP → OA rotation. Gravity draws fetal spine away from maternal spine.',evidence:'Simkin & Ancheta, Labor Progress Handbook 4th ed.',priority:'high',epiduralSafe:false},
+      {name:'Exaggerated Sims Position (Epidural)',description:'Lower leg extended, upper leg 90° hip flexion. Creates pelvic asymmetry to facilitate rotation.',evidence:'Spinning Babies; AWHONN positioning protocols.',priority:'high',epiduralSafe:true},
+      {name:'Abdominal Lift & Tuck (During Contractions)',description:'Lifts the uterus upward and inward. Encourages anterior rotation.',evidence:'Gail Tully / Spinning Babies.',priority:'high',epiduralSafe:true}
+    ],
+    comfortRecs:[
+      {name:'Sterile Water Injections',description:'4 intradermal injections over sacral rhomboid. Highly effective for OP back pain.',evidence:'Cochrane 2012 (Hutton et al.).',priority:'high'},
+      {name:'Bilateral Sacral Counter-Pressure',description:'Firm pressure over bilateral PSIS during contractions.',evidence:'Evidence Based Birth.',priority:'high'},
+      {name:'Double Hip Squeeze',description:'Partner compresses iliac crests toward midline at contraction peak.',evidence:'Simkin & Klaus.',priority:'high'}
+    ]
+  },
+  OT:{label:'Occiput Transverse',color:'#7C3AED',icon:'↔',summary:'Fetal head in transverse diameter. Often transitions to OA spontaneously; promote rotation with asymmetric positions.',
+    priorityPositions:['Lunge (Asymmetric Stance)','Birth Ball Sitting'],
+    additionalRecs:[
+      {name:'Lunge Toward Baby\'s Back',description:'Lunge on the side the baby is facing. Opens that side of the pelvis, guiding rotation to OA.',evidence:'Spinning Babies; Simkin & Ancheta.',priority:'high',epiduralSafe:false},
+      {name:'Stair Climbing with Side-Step',description:'Lateral step-up creates asymmetric pelvic motion encouraging anterior rotation.',evidence:'Simkin & Ancheta.',priority:'high',epiduralSafe:false}
+    ],
+    comfortRecs:[
+      {name:'Hip Squeeze + Rocking',description:'Bilateral hip compression combined with rocking promotes rotation.',evidence:'AWHONN; midwifery consensus.',priority:'high'}
+    ]
+  },
+  asynclitic:{label:'Asynclitism',color:'#2563EB',icon:'⟂',summary:'Lateral head flexion presenting parietal bone first. Asymmetric positions are essential to restore sagittal synclitism.',
+    priorityPositions:['Lunge (Asymmetric Stance)','Walking / Upright'],
+    additionalRecs:[
+      {name:'Exaggerated Lateral Recumbent',description:'Roll to extreme side-lying with top knee propped high. Corrects parietal presentation.',evidence:'Spinning Babies; Simkin & Ancheta.',priority:'high',epiduralSafe:true},
+      {name:'Lunge + Abdominal Lift Combo',description:'Combines pelvic asymmetry with abdominal lift to shift fetal head angle at inlet.',evidence:'Gail Tully / Spinning Babies.',priority:'high',epiduralSafe:false},
+      {name:'Stair Climbing / Curb Walking',description:'Asymmetric step mechanics shift pelvic tilt and correct asynclitism.',evidence:'Simkin & Ancheta.',priority:'high',epiduralSafe:false}
+    ],
+    comfortRecs:[
+      {name:'Hip Squeeze During Contractions',description:'Bilateral iliac compression can help realign head angle at inlet.',evidence:'AWHONN.',priority:'high'}
+    ]
+  }
+};
+
+var DETAILS={
+  'Walking / Upright':{extended:'Ambulation is the simplest and most accessible labor intervention. The combination of gravity and rhythmic hip motion encourages fetal descent while the natural pelvic tilt during walking facilitates engagement of the presenting part.',howTo:['Walk at a comfortable, slow-to-moderate pace','Pause and lean forward against partner or wall during contractions','Take 10–20 minute walks alternated with rest periods','Hydrate frequently; void at least every 2 hours'],keyPoints:['Reduces 1st stage duration by ~1.36 hours (Cochrane 2013)','Lowers epidural request rate','May reduce cesarean delivery','Safe with intermittent monitoring'],cautions:'Avoid if ROM with unengaged head (cord prolapse risk), category II/III FHR tracing, or significant hypertension.'},
+  'Birth Ball Sitting':{extended:'The birth ball provides an unstable surface that engages core muscles and encourages constant subtle pelvic motion. Sitting with hips above knees opens the pelvic inlet and allows gravity-assisted descent without requiring standing.',howTo:['Use a properly sized ball (knees should be slightly below hips)','Sit with feet flat, hip-width apart','Perform slow pelvic circles, figure-8s, or hip rocking','Lean forward over a bed or partner during contractions'],keyPoints:['Excellent option when standing is fatiguing','Encourages spontaneous fetal rotation','Reduces lower back pressure','Compatible with EFM'],cautions:'Ensure adequate spotter for fall prevention, particularly with epidural or significant fatigue.'},
+  'Hands and Knees':{extended:'The quadruped position is one of the most powerful tools for managing back labor and malpositioned fetuses. By placing the maternal abdomen perpendicular to gravity, it encourages the fetal spine to rotate anteriorly — facilitating OP → OA rotation.',howTo:['On bed or padded floor, position on hands and knees','Knees hip-width apart, hands directly under shoulders','Rock pelvis forward and back rhythmically','Optional: drop forearms to bed for \'open knee-chest\' to relieve cervical lip'],keyPoints:['First-line for posterior fetal position','Relieves sacral pressure dramatically','Compatible with epidural with assistance','Open knee-chest can resolve anterior cervical lip'],cautions:'Wrist or knee pain may limit duration. Use padding. Less effective if maintained <30 minutes.'},
+  'Squatting / Supported Squat':{extended:'Squatting opens the pelvic outlet by up to 28% (Russell 1969, Gupta 2017) by separating the ischial tuberosities and allowing maximal rotation of the sacrum.',howTo:['Use a squat bar, partner support, or birth stool for stability','Maintain feet flat with weight evenly distributed','Squat only during contractions; rest in upright or side-lying between','Use intermittently — fatigue accumulates quickly'],keyPoints:['Maximum pelvic outlet expansion of any position','Reduces 2nd stage duration','Lower instrumental delivery rates (Cochrane 2017)','Strongly gravity-assisted'],cautions:'Requires significant lower-body strength. Not appropriate with dense epidural.'},
+  'Lunge (Asymmetric Stance)':{extended:'The lunge creates intentional pelvic asymmetry by elevating one foot, opening that side of the pelvis. This is a cornerstone technique for resolving asynclitism, transverse arrest, and persistent OP positions.',howTo:['Place one foot on a sturdy chair, stool, or bed (knee at ~90°)','Hold for 5 contractions on that side, then switch','Direction: lunge toward the side the baby\'s back is on','Can be performed kneeling on bed for epidural patients'],keyPoints:['Most effective asymmetric position for malpositions','Specifically targets mid-pelvis dystocia','Can be modified for epidural (kneeling lunge with bar support)','Sourced from Spinning Babies and Simkin & Ancheta'],cautions:'Requires balance — use partner or rail. Limit to 5–6 contractions per side.'},
+  'Side-Lying with Peanut Ball':{extended:'The peanut ball is the single most studied positioning intervention in epidural labor. Placed between the knees in lateral position, it mimics the pelvic geometry of squatting while accommodating the mobility limitations of dense epidural anesthesia.',howTo:['Patient in lateral recumbent position','Place peanut ball between knees, supporting upper leg in 90° hip flexion','Top knee rests on the wide end of the ball','Switch sides every 30–60 minutes','Ball size by height: 45cm (<5\'2"), 55cm (5\'2"–5\'8"), 65cm (>5\'8")'],keyPoints:['Reduces 1st stage by 89 min in epidural patients','Reduces 2nd stage by 11 min','May reduce cesarean rate','Standard of care in many L&D units (Roth et al. 2016, JOGNN)'],cautions:'Ensure adequate positioning to prevent peroneal nerve compression of the down leg.'},
+  'Hands and Knees + Pelvic Rocking':{extended:'Hands and knees with active pelvic rocking is the cornerstone intervention for occiput posterior (OP) presentation. The rocking motion combined with the perpendicular orientation to gravity actively encourages the fetal spine to rotate from posterior to anterior.',howTo:['Position on hands and knees on a padded surface','Slowly rock pelvis forward (arched back) and backward (cat pose)','Continue for at least 30 minutes','Combine with pelvic circles and figure-8s for variety'],keyPoints:['Most evidence-based intervention for OP presentation','Should be maintained ≥30 min for sustained effect','Can be combined with abdominal lift during contractions','Reduces need for oxytocin augmentation'],cautions:'Wrist and knee discomfort common — pad generously.'},
+  'Exaggerated Sims Position (Epidural)':{extended:'The exaggerated Sims position is the epidural-friendly alternative for OP rotation. By placing the patient in lateral with extreme upper hip flexion and lower leg extension, it creates significant pelvic asymmetry that mimics the rotational mechanics of the lunge.',howTo:['Patient in lateral recumbent (lie on side opposite baby\'s back if known)','Lower leg extended straight','Upper leg flexed 90° at hip and knee, supported on peanut ball or pillows','Maintain 30 min per side, then switch'],keyPoints:['Best epidural-compatible OP rotation technique','Combines lateral position benefits with rotational mechanics','Use peanut ball for support'],cautions:'Ensure good pillow support to prevent peroneal nerve compression on the down leg.'},
+  'Sterile Water Injections':{extended:'Four small intradermal injections of sterile water over the sacral rhomboid produce rapid, dramatic relief of low back pain — particularly OP back labor. Mechanism involves gate-control theory and counter-irritation. Onset: within minutes; duration: 45–90 minutes.',howTo:['Identify the sacral rhomboid (PSIS bilaterally and 3cm below/medial)','Inject 0.05–0.1 mL sterile water intradermally at each of 4 sites','Use a tuberculin syringe with a 25–27g needle','Warn patient: severe stinging for 30–60 seconds, then relief'],keyPoints:['Significantly reduces back labor pain (Cochrane 2012, Hutton et al.)','No effect on labor progress or fetal status','Repeatable — can re-dose when effect wears off','Excellent for OP labor'],cautions:'Must use sterile water — NOT normal saline (saline does not work). Initial injection pain is significant.'},
+  'Bilateral Sacral Counter-Pressure':{extended:'Sustained firm pressure over the bilateral PSIS during contractions is one of the most effective non-pharmacologic interventions for OP back labor. Works via gate-control theory, counteracting sacral pressure from the posteriorly-positioned fetal occiput.',howTo:['Partner places heels of both hands on each PSIS (dimples of Venus)','Apply firm, sustained pressure inward and slightly upward during the entire contraction','Pressure should be substantial — patient typically requests "harder"','Release between contractions'],keyPoints:['Dramatic relief for OP labor','Requires partner stamina — rotate if multiple support people available','Can be combined with hands & knees position','Most effective when sustained throughout contraction'],cautions:'Partner fatigue is common. Avoid pressure directly on the spine.'},
+  'Open-Glottis Pushing (Exhale-Push)':{extended:'Open-glottis (\'spontaneous\') pushing involves bearing down while exhaling, often with vocalization. More physiologic than directed Valsalva — preserves maternal oxygenation, reduces pelvic floor strain, associated with less perineal trauma and maternal exhaustion.',howTo:['Wait for spontaneous urge to push (Ferguson reflex)','Take a normal breath, then bear down while exhaling slowly','Vocalize with low, open sounds (not high-pitched screams)','3–5 pushes per contraction, 5–6 seconds each','Rest fully between contractions'],keyPoints:['Preferred over Valsalva by ACOG and AWHONN','Reduces maternal exhaustion','Less pelvic floor injury','Better fetal oxygenation'],cautions:'Less efficient when rapid delivery is required — use directed Valsalva for Cat II/III FHR or shoulder dystocia.'},
+  'Hydrotherapy':{extended:'Immersion in warm water during labor produces analgesia comparable to many pharmacologic interventions through multiple mechanisms: buoyancy reduces gravitational forces, hydrostatic pressure reduces edema, warmth produces muscle relaxation.',howTo:['Water temperature 96–100°F (35–37.5°C)','Wait until active labor (≥6 cm) for maximum analgesic effect','Limit immersion to 1–2 hour sessions with breaks','Maintain hydration; monitor maternal temperature q30min'],keyPoints:['Reduces epidural use (Cochrane 2018, Cluett et al.)','Significant subjective pain reduction','Safe for low-risk labors','Compatible with intermittent FHR auscultation'],cautions:'Avoid with ROM and unestablished labor, category II/III FHR, or maternal infection.'},
+  'Warm Perineal Compresses':{extended:'Application of warm compresses to the perineum during the second stage significantly reduces 3rd and 4th degree perineal lacerations. The mechanism involves increased tissue elasticity and improved blood flow.',howTo:['Use clean washcloths in warm sterile water (~110°F / 43°C)','Apply to perineum during pushing once head is visible','Re-warm and reapply throughout active second stage','Combine with controlled, gradual crowning'],keyPoints:['NNT ~16 to prevent one 3rd/4th degree tear (Cochrane 2012)','Standard of care in low-trauma birth practice','Particularly important with first vaginal birth'],cautions:'Test temperature on inner wrist before applying. Replace water frequently.'},
+  'Slow-Paced Breathing (6–10/min)':{extended:'Slow diaphragmatic breathing is the foundational labor breathing technique. It maximizes oxygenation, activates parasympathetic tone, reduces pain perception, and conserves energy.',howTo:['Breathe in slowly through the nose for 4 counts','Pause briefly','Exhale through pursed lips or open mouth for 6 counts','Continue throughout entire contraction'],keyPoints:['Cornerstone Lamaze technique','Reduces sympathetic fight-or-flight response','Improves fetal oxygenation','Sustainable for long latent phase'],cautions:'Watch for hyperventilation (tingling, lightheadedness) — slow down if symptomatic.'},
+  'Modified-Paced Breathing':{extended:'Modified-paced breathing is faster than slow-paced and is used when slow breathing is no longer sufficient — typically as active labor intensifies.',howTo:['Breathe at ~6–9 breaths per minute','Inhale through nose, exhale through pursed lips','Maintain even, controlled rhythm','Avoid shallow chest breathing'],keyPoints:['Used when slow breathing is insufficient in active labor','Maintains better oxygenation than rapid panting','Provides strong focal point during intense contractions'],cautions:'Risk of hyperventilation if pace becomes too fast. Cup hands over mouth/nose if tingling develops.'},
+  'Low Vocalization / Toning':{extended:'Low-pitched moaning, humming, or \'open-throat\' vocalization during contractions is counterintuitive but highly effective. It keeps the soft palate, jaw, and pelvic floor relaxed, while providing sensory feedback that modulates pain.',howTo:['Exhale with low, open vowel sounds ("ohhh", "ahhh", or humming)','Keep jaw slack, mouth open','Avoid high-pitched sounds (associated with tension)','Continue throughout contraction'],keyPoints:['Pelvic floor relaxation correlates with vocal cord relaxation','Reduces pain perception','Strongly recommended in midwifery practice'],cautions:'Coach away from high-pitched screaming, which increases tension.'},
+  'Continuous Doula Support':{extended:'Continuous one-to-one labor support from a trained doula is one of the most effective interventions in obstetrics — with effect sizes rivaling many pharmacologic interventions and no adverse effects.',howTo:['Doula provides continuous physical, emotional, and informational support','Coordinates with — does not replace — clinical staff','Available throughout labor and immediately postpartum'],keyPoints:['25% reduction in cesarean delivery (Cochrane 2017, Bohren et al.)','10% reduction in instrumental delivery','Reduced epidural use','Improved maternal satisfaction'],cautions:'Should not replace continuous nursing presence or qualified clinical care.'},
+  'Directed Valsalva':{extended:'Directed Valsalva pushing involves closed-glottis breath-holding during pushing, with provider counting (typically to 10). While historically standard, it is now used selectively due to maternal/fetal physiologic effects.',howTo:['Patient takes deep breath, holds at end-inspiration','Provider counts to 10 while patient bears down','Repeat 3× per contraction','Use selectively per clinical indication'],keyPoints:['Faster delivery when speed is required','Indicated for Category II/III FHR tracing','Reduces 2nd stage ~20 min vs. spontaneous pushing'],cautions:'Not preferred routinely — may worsen FHR, increase pelvic floor injury, cause exhaustion. Open-glottis pushing preferred when no urgency.'},
+  'Breathing Baby Down':{extended:'\'Breathing the baby down\' is a passive descent technique. Rather than actively pushing, the mother breathes deeply and allows uterine forces plus gravity to achieve descent.',howTo:['Wait for full dilation (10 cm)','Breathe deeply and slowly during contractions','Allow uterus to do the work — no active pushing','Continue until urge to push is overwhelming (Ferguson reflex)','Then transition to open-glottis pushing'],keyPoints:['Reduces total active pushing time','Reduces maternal exhaustion','Particularly useful with epidural (decreased Ferguson reflex)'],cautions:'Not appropriate when expedited delivery is needed.'},
+  '4-7-8 Between Contractions':{extended:'The 4-7-8 breathing technique strongly activates the parasympathetic nervous system, providing rapid recovery between contractions. Used in the interval, NOT during contractions.',howTo:['Inhale through nose for 4 counts','Hold breath for 7 counts','Exhale through mouth for 8 counts','Repeat 1–2 cycles between contractions','Resume normal breathing as next contraction begins'],keyPoints:['Strong parasympathetic activation','Lowers heart rate and stress hormones','Maximizes between-contraction rest'],cautions:'Not used DURING contractions.'}
+};
+
+var RESOURCES={
+  'Walking / Upright':[{title:'Cochrane Review: Maternal positions',url:'https://www.cochrane.org/CD003934'},{title:'Lamaze Healthy Birth Practices',url:'https://www.lamaze.org/Healthy-Birth-Practices'},{title:'▶ Video: Walking in labor',url:'https://www.youtube.com/results?search_query=walking+during+labor+positions'}],
+  'Birth Ball Sitting':[{title:'Evidence Based Birth',url:'https://evidencebasedbirth.com/'},{title:'▶ Video: Birth ball labor positions',url:'https://www.youtube.com/results?search_query=birth+ball+labor+positions'}],
+  'Hands and Knees':[{title:'Spinning Babies',url:'https://www.spinningbabies.com/'},{title:'▶ Video: Hands and knees in labor',url:'https://www.youtube.com/results?search_query=hands+and+knees+labor+position'}],
+  'Squatting / Supported Squat':[{title:'Cochrane: Squatting in second stage',url:'https://www.cochrane.org/CD002006'},{title:'▶ Video: Supported squat in labor',url:'https://www.youtube.com/results?search_query=supported+squat+labor'}],
+  'Lunge (Asymmetric Stance)':[{title:'Spinning Babies: Lunge technique',url:'https://www.spinningbabies.com/learn-more/techniques/'},{title:'▶ Video: Labor lunge position',url:'https://www.youtube.com/results?search_query=labor+lunge+position+spinning+babies'}],
+  'Side-Lying with Peanut Ball':[{title:'Roth et al. 2016 — JOGNN',url:'https://www.jognn.org/'},{title:'AWHONN',url:'https://www.awhonn.org/'},{title:'▶ Video: Peanut ball in labor',url:'https://www.youtube.com/results?search_query=peanut+ball+labor+positions'}],
+  'Hands and Knees + Pelvic Rocking':[{title:'Spinning Babies',url:'https://www.spinningbabies.com/'},{title:'▶ Video: Pelvic rocking OP labor',url:'https://www.youtube.com/results?search_query=pelvic+rocking+occiput+posterior'}],
+  'Exaggerated Sims Position (Epidural)':[{title:'Spinning Babies: Sidelying Release',url:'https://www.spinningbabies.com/learn-more/techniques/'},{title:'▶ Video: Exaggerated Sims',url:'https://www.youtube.com/results?search_query=exaggerated+sims+position+labor'}],
+  'Sterile Water Injections':[{title:'Cochrane: Sterile water injections',url:'https://www.cochrane.org/CD009107'},{title:'▶ Video: Sterile water injection technique',url:'https://www.youtube.com/results?search_query=sterile+water+injection+labor+technique'}],
+  'Bilateral Sacral Counter-Pressure':[{title:'Evidence Based Birth',url:'https://evidencebasedbirth.com/'},{title:'▶ Video: Sacral counter pressure',url:'https://www.youtube.com/results?search_query=sacral+counter+pressure+labor'}],
+  'Open-Glottis Pushing (Exhale-Push)':[{title:'ACOG',url:'https://www.acog.org/'},{title:'AWHONN',url:'https://www.awhonn.org/'},{title:'▶ Video: Open glottis pushing',url:'https://www.youtube.com/results?search_query=open+glottis+pushing+labor'}],
+  'Hydrotherapy':[{title:'Cochrane: Water immersion in labor',url:'https://www.cochrane.org/CD000111'},{title:'▶ Video: Hydrotherapy in labor',url:'https://www.youtube.com/results?search_query=hydrotherapy+during+labor'}],
+  'Warm Perineal Compresses':[{title:'Cochrane: Perineal techniques',url:'https://www.cochrane.org/CD006672'},{title:'▶ Video: Warm compress perineum',url:'https://www.youtube.com/results?search_query=warm+compress+perineum+birth'}],
+  'Slow-Paced Breathing (6–10/min)':[{title:'Lamaze International',url:'https://www.lamaze.org/'},{title:'▶ Video: Slow paced breathing labor',url:'https://www.youtube.com/results?search_query=slow+paced+breathing+labor+lamaze'}],
+  'Modified-Paced Breathing':[{title:'Lamaze International',url:'https://www.lamaze.org/'},{title:'▶ Video: Modified breathing labor',url:'https://www.youtube.com/results?search_query=modified+paced+breathing+labor'}],
+  'Low Vocalization / Toning':[{title:'Evidence Based Birth',url:'https://evidencebasedbirth.com/'},{title:'▶ Video: Vocalization in labor',url:'https://www.youtube.com/results?search_query=vocalization+toning+labor'}],
+  'Continuous Doula Support':[{title:'Cochrane 2017 (Bohren et al.)',url:'https://www.cochrane.org/CD003766'},{title:'DONA International',url:'https://www.dona.org/'}],
+  'Directed Valsalva':[{title:'ACOG Practice Bulletin',url:'https://www.acog.org/'},{title:'▶ Video: Directed pushing',url:'https://www.youtube.com/results?search_query=valsalva+pushing+second+stage'}],
+  'Breathing Baby Down':[{title:'Lamaze HBP #5',url:'https://www.lamaze.org/Healthy-Birth-Practices'},{title:'▶ Video: Laboring down',url:'https://www.youtube.com/results?search_query=laboring+down+breathing+baby'}],
+  '4-7-8 Between Contractions':[{title:'Evidence Based Birth',url:'https://evidencebasedbirth.com/'},{title:'▶ Video: 4-7-8 breathing',url:'https://www.youtube.com/results?search_query=4-7-8+breathing+relaxation'}]
+};
+
+var ILLUS={
+  walking:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="40" r="14" fill="none" stroke="#475569" stroke-width="2.5"/><line x1="100" y1="54" x2="100" y2="120" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 70 Q80 85 70 100" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 70 Q120 80 130 95" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="100" cy="100" rx="14" ry="18" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><path d="M100 120 Q90 145 85 170" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 120 Q115 140 120 170" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  birthBall:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="150" r="40" fill="#7FB5A8" opacity="0.25" stroke="#7FB5A8" stroke-width="2"/><circle cx="100" cy="55" r="13" fill="none" stroke="#475569" stroke-width="2.5"/><line x1="100" y1="68" x2="100" y2="115" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="100" cy="105" rx="13" ry="14" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><path d="M100 80 Q75 90 65 100" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 80 Q125 90 135 100" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 120 L75 145" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 120 L125 145" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  handsKnees:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><line x1="40" y1="170" x2="160" y2="170" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3 3"/><circle cx="55" cy="100" r="13" fill="none" stroke="#475569" stroke-width="2.5"/><line x1="68" y1="100" x2="145" y2="105" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="120" cy="120" rx="20" ry="13" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><line x1="68" y1="105" x2="68" y2="165" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><line x1="68" y1="120" x2="55" y2="165" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><line x1="140" y1="115" x2="140" y2="165" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><line x1="140" y1="115" x2="155" y2="165" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  squat:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="50" r="13" fill="none" stroke="#475569" stroke-width="2.5"/><line x1="100" y1="63" x2="100" y2="115" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="100" cy="105" rx="14" ry="15" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><path d="M100 78 Q70 95 65 130" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 78 Q130 95 135 130" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M100 120 L70 145 L75 178" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M100 120 L130 145 L125 178" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  lunge:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="40" y="135" width="35" height="45" fill="#E0E7EF" stroke="#94A3B8" stroke-width="2" rx="2"/><circle cx="105" cy="45" r="13" fill="none" stroke="#475569" stroke-width="2.5"/><line x1="105" y1="58" x2="105" y2="115" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="105" cy="105" rx="13" ry="14" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><path d="M105 75 Q130 85 140 95" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M105 75 Q85 85 75 95" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M105 120 L60 135" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M105 120 L115 150 L130 178" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  sideLying:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="55" cy="155" rx="15" ry="13" fill="none" stroke="#475569" stroke-width="2.5"/><ellipse cx="100" cy="135" rx="32" ry="17" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><path d="M70 152 Q100 145 145 145" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="145" cy="125" rx="18" ry="10" fill="#A8D5CC" opacity="0.5" stroke="#7FB5A8" stroke-width="1.5"/><ellipse cx="145" cy="155" rx="18" ry="10" fill="#A8D5CC" opacity="0.5" stroke="#7FB5A8" stroke-width="1.5"/><text x="130" y="183" font-size="9" fill="#7FB5A8" font-family="monospace">peanut ball</text></svg>',
+  exaggSims:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="50" cy="150" rx="14" ry="12" fill="none" stroke="#475569" stroke-width="2.5"/><ellipse cx="100" cy="135" rx="32" ry="17" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><path d="M64 150 Q110 142 165 145" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><path d="M130 135 L120 90 L95 60" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="140" cy="80" rx="20" ry="8" fill="#FFEEDC" stroke="#E8A87C" stroke-width="1.5" opacity="0.7"/><text x="130" y="55" font-size="9" fill="#94A3B8" font-family="monospace">pillows</text></svg>',
+  semirecumbent:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M30 160 L30 100 L170 130 L170 160 Z" fill="#E0E7EF" stroke="#94A3B8" stroke-width="2" stroke-linejoin="round"/><circle cx="50" cy="95" r="12" fill="none" stroke="#475569" stroke-width="2.5"/><line x1="62" y1="100" x2="155" y2="135" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="115" cy="118" rx="22" ry="13" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2" transform="rotate(20 115 118)"/></svg>',
+  breath:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M20 100 Q50 60 80 100 T140 100 T200 100" fill="none" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/><text x="55" y="135" font-size="14" fill="#94A3B8" font-family="monospace">in — — out</text></svg>',
+  comfort:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="70" cy="100" r="22" fill="#FECACA" opacity="0.6" stroke="#F87171" stroke-width="2"/><circle cx="120" cy="80" r="16" fill="#FED7AA" opacity="0.6" stroke="#F97316" stroke-width="2"/><circle cx="140" cy="125" r="20" fill="#BAE6FD" opacity="0.6" stroke="#0EA5E9" stroke-width="2"/></svg>',
+  ball:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="60" fill="#7FB5A8" opacity="0.2" stroke="#7FB5A8" stroke-width="2"/><ellipse cx="100" cy="100" rx="60" ry="15" fill="none" stroke="#7FB5A8" stroke-width="1" opacity="0.4"/><ellipse cx="100" cy="100" rx="15" ry="60" fill="none" stroke="#7FB5A8" stroke-width="1" opacity="0.4"/></svg>',
+  default:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="50" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/><text x="100" y="108" font-size="36" fill="#94A3B8" text-anchor="middle" font-family="serif">+</text></svg>'
+};
+
+var ILLUS_MAP={
+  'Walking / Upright':'walking','Birth Ball Sitting':'birthBall','Hands and Knees':'handsKnees',
+  'Hands and Knees + Pelvic Rocking':'handsKnees','Hands and Knees for Pushing':'handsKnees',
+  'Squatting / Supported Squat':'squat','Squatting / Birth Stool':'squat','Supported Half-Squat (Squat Bar)':'squat',
+  'Lunge (Asymmetric Stance)':'lunge','Lunge Toward Baby\'s Back':'lunge','Lunge + Abdominal Lift Combo':'lunge',
+  'Side-Lying with Peanut Ball':'sideLying','Side-Lying (Left or Right)':'sideLying','Left Lateral Recumbent':'sideLying',
+  'Exaggerated Lateral Recumbent':'exaggSims','Exaggerated Sims Position (Epidural)':'exaggSims',
+  'Semi-Recumbent (HOB 30–45°)':'semirecumbent',
+  'Pelvic Circles / Figure-8':'ball','Hip Shifts on Birth Ball':'ball'
+};
+
+var STATION_ADVICE=[
+  {max:-3,label:'Unengaged',tip:'Upright + walking to encourage engagement. Asymmetric positions (lunge, curb walking) particularly useful.',color:'#0F766E'},
+  {max:0, label:'Engaged / Mid',tip:'Continue upright positions. Birth ball and pelvic rocking effective for descent.',color:'#0E7490'},
+  {max:2, label:'Low / Descended',tip:'Squat and asymmetric positions to guide through mid-pelvis.',color:'#C2410C'},
+  {max:5, label:'Imminent',tip:'At or near perineum. Pushing positions and warm compresses.',color:'#9D174D'}
+];
+
+var CX_ADVICE={
+  mild:{label:'Mild / Irregular',color:'#64748B',tip:'Early or prodromal pattern. Prioritize energy conservation, ambulation, hydration, and rest as tolerated.'},
+  moderate:{label:'Moderate / Regular',color:'#C2410C',tip:'Active labor establishing. Breathing techniques essential. Position changes every 20–30 min.'},
+  strong:{label:'Strong / Peak',color:'#DC2626',tip:'Transition or peak active. Maximal support each contraction — breathing cues, counter-pressure, focused touch.'}
+};
+
+// ─── APP STATE ───
+var S={dilation:4,effacement:60,station:-2,ep:0,fp:'OA',cx:'moderate'};
+var panelState={open:false,view:'list',cat:'',item:null};
+
+// ─── URL STATE ───
+function readURL(){
+  try{
+    var h=window.location.hash.slice(1);
+    if(!h)return;
+    var p=new URLSearchParams(h);
+    if(p.has('d'))S.dilation=+p.get('d');
+    if(p.has('e'))S.effacement=+p.get('e');
+    if(p.has('s'))S.station=+p.get('s');
+    if(p.has('ep'))S.ep=+p.get('ep');
+    if(p.has('fp'))S.fp=p.get('fp');
+    if(p.has('c'))S.cx=p.get('c');
+    // Apply to DOM
+    document.getElementById('dil').value=S.dilation;
+    document.getElementById('eff').value=S.effacement;
+    document.getElementById('sta').value=S.station;
+  }catch(e){}
+}
+function writeURL(){
+  try{
+    var p=new URLSearchParams();
+    p.set('d',S.dilation);p.set('e',S.effacement);p.set('s',S.station);
+    p.set('ep',S.ep);p.set('fp',S.fp);p.set('c',S.cx);
+    history.replaceState(null,'','#'+p.toString());
+  }catch(e){}
+}
+
+// ─── HELPERS ───
+function getPhase(){
+  if(S.dilation>=10&&S.station>=0)return 'pushing';
+  if(S.dilation>=6)return 'active';
+  return 'latent';
+}
+function getStationInfo(){
+  for(var i=0;i<STATION_ADVICE.length;i++){if(S.station<=STATION_ADVICE[i].max)return STATION_ADVICE[i];}
+  return STATION_ADVICE[3];
+}
+function hex(c,a){
+  var n=Math.round(a*255).toString(16).padStart(2,'0');
+  return c+n;
+}
+
+// ─── UPDATE SLIDERS ───
+function updateDilation(v){S.dilation=+v;render();writeURL();}
+function updateEffacement(v){S.effacement=+v;render();writeURL();}
+function updateStation(v){S.station=+v;render();writeURL();}
+
+// ─── PILLS ───
+function setPill(group,val,btn){
+  S[group]=val;
+  var rows={'ep':'pills-ep','fp':'pills-fp','cx':'pills-cx'};
+  var colors={'ep':{0:'#0F766E',1:'#B45309'},'fp':{OA:'#059669',OP:'#EA580C',OT:'#7C3AED',asynclitic:'#2563EB'},'cx':{mild:'#64748B',moderate:'#C2410C',strong:'#DC2626'}};
+  var btns=document.getElementById(rows[group]).querySelectorAll('.pill');
+  btns.forEach(function(b){
+    b.classList.remove('active');
+    b.style.borderColor='#E2E8F0';b.style.background='#fff';b.style.color='#64748B';
+  });
+  var c=colors[group][val]||'#0F766E';
+  btn.classList.add('active');
+  btn.style.borderColor=c;btn.style.background=hex(c,0.08);btn.style.color=c;
+  render();writeURL();
+}
+
+// ─── MOBILE TOGGLE ───
+var inputsOpen=true;
+function toggleInputs(){
+  inputsOpen=!inputsOpen;
+  document.getElementById('inputs-body').style.display=inputsOpen?'':'none';
+  document.getElementById('chevron').style.transform=inputsOpen?'rotate(180deg)':'rotate(0)';
+}
+
+// ─── BUILD LISTS ───
+// Fix 2: additionalRecs filtered by epiduralSafe when epidural is active
+function buildLists(){
+  var phase=getPhase();
+  var rec=PHASES[phase];
+  var fp=FP_DATA[S.fp];
+
+  var posList=[];
+  if(S.fp!=='OA'){
+    fp.additionalRecs.forEach(function(r){
+      if(S.ep&&r.epiduralSafe===false)return;
+      posList.push(Object.assign({},r,{rotationTag:fp.label,rotationTagColor:fp.color}));
+    });
+  }
+  rec.positions.forEach(function(p){
+    if(S.ep&&!p.epiduralSafe)return;
+    var highlighted=fp.priorityPositions.indexOf(p.name)>=0;
+    posList.push(Object.assign({},p,{rotationTag:highlighted?fp.label:null,rotationTagColor:fp.color}));
+  });
+  rec.movements.forEach(function(m){
+    if(S.ep&&!m.epiduralSafe)return;
+    posList.push(Object.assign({},m,{isMovement:true}));
+  });
+
+  var brList=rec.breathing.slice();
+
+  var coList=[];
+  if(S.fp!=='OA'){
+    fp.comfortRecs.forEach(function(r){
+      coList.push(Object.assign({},r,{rotationTag:fp.label,rotationTagColor:fp.color}));
+    });
+  }
+  coList=coList.concat(rec.comfort);
+
+  return {posList:posList,brList:brList,coList:coList,rec:rec,fp:fp};
+}
+
+// ─── RENDER ───
+function render(){
+  var phase=getPhase();
+  var b=buildLists();
+  var rec=b.rec;
+  var fp=b.fp;
+  var posList=b.posList;
+  var brList=b.brList;
+  var coList=b.coList;
+  var si=getStationInfo();
+  var cx=CX_ADVICE[S.cx];
+
+  // Slider fills & labels
+  var dilPct=(S.dilation/10)*100;
+  document.getElementById('dil-fill').style.width=dilPct+'%';
+  document.getElementById('dil-fill').style.background='linear-gradient(90deg,#0F766E,'+rec.color+')';
+  document.getElementById('dil-val').textContent=S.dilation+' cm';
+  document.getElementById('dil-sub').textContent=S.dilation<6?'Latent phase':S.dilation<10?'Active phase':'Complete';
+
+  var effPct=(S.effacement/100)*100;
+  document.getElementById('eff-fill').style.width=effPct+'%';
+  document.getElementById('eff-fill').style.background='linear-gradient(90deg,#0F766E,'+rec.color+')';
+  document.getElementById('eff-val').textContent=S.effacement+'%';
+  document.getElementById('eff-sub').textContent=S.effacement<50?'Partially effaced':S.effacement<80?'Mostly effaced':'Fully effaced';
+
+  var staPct=((S.station+5)/10)*100;
+  document.getElementById('sta-fill').style.width=staPct+'%';
+  document.getElementById('sta-fill').style.background='linear-gradient(90deg,#0F766E,'+rec.color+')';
+  document.getElementById('sta-val').textContent=S.station>0?'+'+S.station:''+S.station;
+  document.getElementById('sta-sub').textContent=si.label;
+
+  // Phase box
+  var pb=document.getElementById('phase-box');
+  pb.style.background=hex(rec.color,0.07);
+  pb.style.border='1px solid '+hex(rec.color,0.25);
+  pb.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:'+rec.color+';letter-spacing:0.08em;text-transform:uppercase;font-weight:600">'+rec.label+'</span><span style="font-size:10px;color:#64748B">'+rec.range+'</span></div><div style="font-size:11.5px;color:#334155;line-height:1.55">'+si.tip+'</div>';
+
+  // Alerts
+  document.getElementById('ep-alert').style.display=S.ep?'':'none';
+  document.getElementById('complete-alert').style.display=(S.dilation>=10&&S.station<0)?'':'none';
+  var cxb=document.getElementById('cx-box');
+  cxb.style.background=hex(cx.color,0.06);
+  cxb.style.border='1px solid '+hex(cx.color,0.2);
+  cxb.style.color=cx.color;
+  cxb.innerHTML='<strong>'+cx.label+':</strong> '+cx.tip;
+
+  // FP banner
+  var banner=document.getElementById('fp-banner');
+  if(S.fp!=='OA'){
+    banner.style.display='';
+    banner.style.background=hex(fp.color,0.07);
+    banner.style.border='1px solid '+hex(fp.color,0.25);
+    banner.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="font-size:16px">'+fp.icon+'</span><span style="font-family:ui-serif,Georgia,serif;font-size:14px;font-weight:600;color:'+fp.color+'">'+fp.label+'</span></div><p style="font-size:12.5px;color:#475569;line-height:1.55">'+fp.summary+'</p>';
+  }else{
+    banner.style.display='none';
+  }
+
+  // Category cards
+  var posColor=S.fp!=='OA'?fp.color:rec.color;
+  var coColor=(S.fp!=='OA'&&fp.comfortRecs.length>0)?fp.color:rec.color;
+
+  // Fix 3: removed unused title parameter from styleCard calls
+  styleCard('cat-pos',posColor,posList.length,
+    S.fp!=='OA'?'Phase-appropriate positions plus '+fp.label+' rotation strategies. Includes positions, movement, and partner-supported techniques.':'Phase-appropriate positions and movement strategies including priority positions and active movement.');
+  styleCard('cat-br',rec.color,brList.length,
+    'Phase-appropriate breathing techniques — slow-paced for latent, modified-paced for active, open-glottis for second stage.');
+  styleCard('cat-co',coColor,coList.length,
+    S.fp!=='OA'&&fp.comfortRecs.length>0?fp.label+'-targeted comfort measures plus phase-appropriate non-pharmacologic interventions.':'Non-pharmacologic interventions: hydrotherapy, TENS, sterile water injections, doula support, perineal techniques.');
+
+  // If panel is open in list view, re-render it
+  if(panelState.open&&panelState.view==='list'){
+    var items=panelState.cat==='pos'?posList:panelState.cat==='br'?brList:coList;
+    var color=panelState.cat==='pos'?posColor:panelState.cat==='br'?rec.color:coColor;
+    var note=buildNote(panelState.cat,fp);
+    renderList(items,color,note);
+  }
+}
+
+// Fix 3: removed title parameter
+function styleCard(id,color,count,summary){
+  var card=document.getElementById(id);
+  card.style.borderColor='#E5E7EB';
+  card.onmouseenter=function(){this.style.borderColor=color;this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px '+hex(color,0.12);};
+  card.onmouseleave=function(){this.style.borderColor='#E5E7EB';this.style.transform='';this.style.boxShadow='';};
+  document.getElementById(id+'-icon').style.background=hex(color,0.1);
+  document.getElementById(id+'-icon').style.border='1px solid '+hex(color,0.2);
+  document.getElementById(id+'-arrow').style.color=color;
+  document.getElementById(id+'-count').textContent=count+' '+(count===1?'recommendation':'recommendations');
+  document.getElementById(id+'-summary').textContent=summary;
+}
+
+function buildNote(cat,fp){
+  if(cat==='pos'&&S.fp!=='OA')return '<strong>'+fp.label+':</strong> '+fp.summary+' Priority interventions are listed first.';
+  if(cat==='co'&&S.fp!=='OA'&&fp.comfortRecs.length>0)return '<strong>'+fp.label+':</strong> Targeted comfort measures listed first.';
+  return null;
+}
+
+// ─── PANEL ───
+function openCategory(cat){
+  panelState.open=true;panelState.view='list';panelState.cat=cat;
+  // Fix 4: removed dead catTitle local variable
+  var b=buildLists();
+  var posColor=S.fp!=='OA'?b.fp.color:b.rec.color;
+  var coColor=(S.fp!=='OA'&&b.fp.comfortRecs.length>0)?b.fp.color:b.rec.color;
+  var items=cat==='pos'?b.posList:cat==='br'?b.brList:b.coList;
+  var color=cat==='pos'?posColor:cat==='br'?b.rec.color:coColor;
+  renderList(items,color,buildNote(cat,b.fp));
+  showPanel();
+}
+
+function showPanel(){
+  document.getElementById('side-panel').classList.add('open');
+  document.getElementById('panel-backdrop').style.display='block';
+}
+function closePanel(){
+  panelState.open=false;
+  document.getElementById('side-panel').classList.remove('open');
+  document.getElementById('panel-backdrop').style.display='none';
+}
+
+function renderList(items,color,note){
+  var catTitle=panelState.cat==='pos'?'Positions & Movement':panelState.cat==='br'?'Breathing':'Comfort Measures';
+  document.getElementById('panel-header-left').innerHTML='<div id="panel-cat-label" style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:3px;color:'+color+'">Category</div><div id="panel-title" style="font-family:ui-serif,Georgia,serif;font-size:20px;font-weight:600;color:#0F172A;line-height:1.2">'+catTitle+'</div>';
+
+  var html='';
+  if(note){
+    html+='<div class="list-header-note" style="background:'+hex(color,0.07)+';border:1px solid '+hex(color,0.2)+';color:#334155">'+note+'</div>';
+  }
+  items.forEach(function(it,i){
+    var bgStyle=it.priority==='high'?'background:'+hex(color,0.06)+';border-color:'+hex(color,0.3)+';':'';
+    var badges='';
+    if(it.priority==='high')badges+='<span class="badge" style="background:'+hex(color,0.1)+';color:'+color+';border:1px solid '+hex(color,0.3)+'">Priority</span>';
+    if(it.epiduralSafe)badges+='<span class="badge" style="background:#0F766E15;color:#0F766E;border:1px solid #0F766E40">Epidural ✓</span>';
+    if(it.source)badges+='<span class="badge" style="background:'+hex(color,0.1)+';color:'+color+';border:1px solid '+hex(color,0.3)+'">'+it.source+'</span>';
+    if(it.rotationTag)badges+='<span class="badge" style="background:'+hex(it.rotationTagColor||color,0.1)+';color:'+(it.rotationTagColor||color)+';border:1px solid '+hex(it.rotationTagColor||color,0.3)+'">'+it.rotationTag+'</span>';
+
+    html+='<button class="list-item" style="'+bgStyle+'" onclick="openItem('+i+')" data-idx="'+i+'">'
+      +'<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px">'
+      +'<span class="list-item-name">'+esc(it.name)+'</span>'
+      +(badges?'<div class="badges">'+badges+'</div>':'')
+      +'</div>'
+      +'<div class="list-item-desc">'+esc(it.description)+'</div>'
+      +'<div class="list-item-tap" style="color:'+color+'">Tap for full detail →</div>'
+      +'</button>';
+  });
+  document.getElementById('panel-body').innerHTML=html;
+
+  window._currentItems=items;
+  window._currentColor=color;
+}
+
+function openItem(idx){
+  var item=window._currentItems[idx];
+  var color=window._currentColor;
+  panelState.view='detail';panelState.item=item;
+
+  var catTitle=panelState.cat==='pos'?'Positions & Movement':panelState.cat==='br'?'Breathing':'Comfort Measures';
+  document.getElementById('panel-header-left').innerHTML=
+    '<button id="panel-back" onclick="backToList()" style="display:flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;color:#64748B;font-size:11px;font-family:inherit;letter-spacing:0.05em;padding:0;text-transform:uppercase">← '+catTitle+'</button>';
+
+  var det=DETAILS[item.name];
+  var illusKey=ILLUS_MAP[item.name]||(panelState.cat==='br'?'breath':panelState.cat==='co'?'comfort':'default');
+  var illus=ILLUS[illusKey]||ILLUS.default;
+
+  var html='<div style="padding:14px 20px 0"><div style="font-size:10px;color:'+color+';letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:4px">'+catTitle+'</div>'
+    +'<div style="font-family:ui-serif,Georgia,serif;font-size:22px;font-weight:600;color:#0F172A;line-height:1.2;margin-bottom:16px">'+esc(item.name)+'</div></div>';
+
+  html+='<div style="padding:0 20px 20px">';
+
+  html+='<div class="detail-illus" style="background:linear-gradient(135deg,'+hex(color,0.07)+','+hex(color,0.02)+');border:1px solid '+hex(color,0.15)+'">'+illus+'</div>';
+
+  html+='<div class="detail-section-label">Overview</div>'
+    +'<p class="detail-overview">'+(det?esc(det.extended):esc(item.description))+'</p>';
+
+  if(det&&det.howTo){
+    html+='<div class="detail-section-label">Technique</div><ol style="list-style:none;padding:0;margin:0 0 22px">';
+    det.howTo.forEach(function(step,i){
+      html+='<li class="step-li"><span class="step-num" style="background:'+hex(color,0.1)+';color:'+color+'">'+(i+1)+'</span>'+esc(step)+'</li>';
+    });
+    html+='</ol>';
+  }
+
+  if(det&&det.keyPoints){
+    html+='<div class="detail-section-label">Clinical Pearls</div>'
+      +'<div style="background:'+hex(color,0.06)+';border:1px solid '+hex(color,0.15)+';border-radius:10px;padding:14px 16px;margin-bottom:22px">';
+    det.keyPoints.forEach(function(p){
+      html+='<div class="pearl-item"><span style="color:'+color+';font-size:12px;margin-top:2px">▸</span><span class="pearl-text">'+esc(p)+'</span></div>';
+    });
+    html+='</div>';
+  }
+
+  if(det&&det.cautions){
+    html+='<div class="caution-box"><div class="caution-label">⚠ Cautions</div><div class="caution-text">'+esc(det.cautions)+'</div></div>';
+  }
+
+  if(item.evidence){
+    html+='<div class="detail-section-label">Evidence Base</div>'
+      +'<div class="evidence-block" style="border-left-color:'+color+'">'+esc(item.evidence)+'</div>';
+  }
+
+  var res=RESOURCES[item.name];
+  if(res&&res.length){
+    html+='<div class="detail-section-label">Resources &amp; Videos</div>';
+    res.forEach(function(r){
+      html+='<a href="'+r.url+'" target="_blank" rel="noopener noreferrer" class="res-link" '
+        +'onmouseenter="this.style.borderColor=\''+color+'\';this.style.background=\''+hex(color,0.04)+'\'"'
+        +' onmouseleave="this.style.borderColor=\'#E5E7EB\';this.style.background=\'#fff\'">'
+        +esc(r.title)+'<span style="margin-left:auto;color:#94A3B8;font-size:11px">↗</span></a>';
+    });
+  }
+
+  html+='</div>';
+  document.getElementById('panel-body').innerHTML=html;
+}
+
+function backToList(){
+  panelState.view='list';
+  var b=buildLists();
+  var posColor=S.fp!=='OA'?b.fp.color:b.rec.color;
+  var coColor=(S.fp!=='OA'&&b.fp.comfortRecs.length>0)?b.fp.color:b.rec.color;
+  var items=panelState.cat==='pos'?b.posList:panelState.cat==='br'?b.brList:b.coList;
+  var color=panelState.cat==='pos'?posColor:panelState.cat==='br'?b.rec.color:coColor;
+  renderList(items,color,buildNote(panelState.cat,b.fp));
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  setTimeout(function(){t.style.display='none';},2500);
+}
+
+// ─── ESC KEY ───
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&panelState.open){
+    if(panelState.view==='detail')backToList();
+    else closePanel();
+  }
+});
+
+// ─── HTML ESCAPE ───
+function esc(s){
+  if(!s)return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── INIT ───
+readURL();
+render();
+// Re-apply pill states from S after readURL
+(function(){
+  var fpColors={OA:'#059669',OP:'#EA580C',OT:'#7C3AED',asynclitic:'#2563EB'};
+  var cxColors={mild:'#64748B',moderate:'#C2410C',strong:'#DC2626'};
+  document.getElementById('pills-fp').querySelectorAll('.pill').forEach(function(b){
+    var v=b.dataset.val;
+    b.classList.remove('active');b.style.borderColor='#E2E8F0';b.style.background='#fff';b.style.color='#64748B';
+    if(v===S.fp){var c=fpColors[v];b.classList.add('active');b.style.borderColor=c;b.style.background=hex(c,0.08);b.style.color=c;}
+  });
+  document.getElementById('pills-ep').querySelectorAll('.pill').forEach(function(b){
+    var v=+b.dataset.val;
+    b.classList.remove('active');b.style.borderColor='#E2E8F0';b.style.background='#fff';b.style.color='#64748B';
+    if(v===S.ep){var c=v?'#B45309':'#0F766E';b.classList.add('active');b.style.borderColor=c;b.style.background=hex(c,0.08);b.style.color=c;}
+  });
+  document.getElementById('pills-cx').querySelectorAll('.pill').forEach(function(b){
+    var v=b.dataset.val;
+    b.classList.remove('active');b.style.borderColor='#E2E8F0';b.style.background='#fff';b.style.color='#64748B';
+    if(v===S.cx){var c=cxColors[v];b.classList.add('active');b.style.borderColor=c;b.style.background=hex(c,0.08);b.style.color=c;}
+  });
+})();
+</script>
+</body>
+</html>
