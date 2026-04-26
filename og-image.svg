@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FAFAF7" />
+  <circle cx="900" cy="315" r="200" fill="#0F766E" opacity="0.05" />
+  <path d="M100 315 L1100 315" stroke="#E5E7EB" stroke-width="1" />
+  
+  <text x="100" y="280" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="#0F172A">Labor Support Guide</text>
+  <text x="100" y="360" font-family="monospace" font-size="24" letter-spacing="4" fill="#64748B">EVIDENCE-BASED POSITIONING &amp; COMFORT</text>
+  
+  <circle cx="1000" cy="100" r="40" fill="#0F766E" />
+  <path d="M990 90 v20 h15" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <rect x="100" y="500" width="300" height="40" rx="20" fill="#0F766E" opacity="0.1" />
+  <text x="250" y="525" font-family="monospace" font-size="18" fill="#0F766E" text-anchor="middle">mu-laborapp.web.app</text>
+</svg>
