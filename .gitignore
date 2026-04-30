@@ -1,0 +1,8 @@
+# Firebase
+.firebase/
+firebase-debug.log*
+.firebaserc
+
+# OS files
+.DS_Store
+Thumbs.db
