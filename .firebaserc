@@ -7,6 +7,9 @@
       "hosting": {
         "live": [
           "labor-support-guide"
+        ],
+        "staging": [
+          "labor-support-guide-dev"
         ]
       }
     }

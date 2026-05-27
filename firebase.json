@@ -1,20 +1,40 @@
 {
-  "hosting": {
-    "target": "live",
-    "public": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**",
-      "CLAUDE.md",
-      "Labor App Icon.png",
-      "unruffled-proskuriakova-4f5f2c/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "target": "live",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "CLAUDE.md",
+        "Labor App Icon.png",
+        "unruffled-proskuriakova-4f5f2c/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "staging",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "CLAUDE.md",
+        "Labor App Icon.png",
+        "unruffled-proskuriakova-4f5f2c/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
 }
