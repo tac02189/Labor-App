@@ -140,17 +140,133 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   .pill{padding:10px 14px;font-size:12px}
   .cat-card{padding:18px}
 }
+
+/* ─── Screen router ─── */
+section.screen{display:none}
+section.screen.active{display:block}
+
+/* Header back button (visible on non-home screens) */
+#header-back{display:none;align-items:center;gap:6px;background:none;border:1px solid #E5E7EB;color:#475569;font-size:12.5px;font-family:inherit;letter-spacing:0.01em;padding:7px 12px;border-radius:8px;cursor:pointer;flex-shrink:0;transition:all 0.15s}
+#header-back:hover{background:#F1F5F9;color:#0F172A;border-color:#CBD5E1}
+#header.not-home #header-back{display:inline-flex}
+#header.not-home h1{font-size:16px}
+#header.not-home #header-sub{font-size:9.5px}
+
+/* Home screen */
+.home-wrap{max-width:780px;margin:0 auto;padding:48px 24px 64px;padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right));padding-bottom:max(64px,env(safe-area-inset-bottom))}
+.home-hero{margin-bottom:36px;text-align:center}
+.home-hero h1{font-family:ui-serif,Georgia,serif;font-size:34px;font-weight:600;color:#0F172A;letter-spacing:-0.02em;line-height:1.15;margin-bottom:10px}
+.home-hero p{font-size:14px;color:#64748B;line-height:1.6;max-width:520px;margin:0 auto}
+.home-card{display:flex;align-items:center;gap:18px;padding:22px 24px;background:#fff;border:1px solid #E5E7EB;border-radius:16px;margin-bottom:14px;width:100%;text-align:left;font-family:inherit;transition:all 0.2s;cursor:pointer}
+.home-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,23,42,0.06);border-color:#CBD5E1}
+.home-card-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.home-card-body{flex:1;min-width:0}
+.home-card-body h2{font-family:ui-serif,Georgia,serif;font-size:20px;font-weight:600;color:#0F172A;line-height:1.2;margin-bottom:6px}
+.home-card-body p{font-size:13px;color:#475569;line-height:1.55}
+.home-card-arrow{color:#94A3B8;font-size:20px;align-self:center;flex-shrink:0}
+
+/* Article-style screens (Intro + Intervention detail) */
+.article-wrap{max-width:760px;margin:0 auto;padding:32px 28px 64px;padding-left:max(28px,env(safe-area-inset-left));padding-right:max(28px,env(safe-area-inset-right));padding-bottom:max(64px,env(safe-area-inset-bottom))}
+.article-eyebrow{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#64748B;font-weight:600;margin-bottom:6px}
+.article-title{font-family:ui-serif,Georgia,serif;font-size:30px;font-weight:600;color:#0F172A;letter-spacing:-0.02em;line-height:1.15;margin-bottom:14px}
+.article-lede{font-size:15px;color:#475569;line-height:1.65;margin-bottom:28px}
+.article-section{margin-bottom:32px}
+.article-section h2{font-family:ui-serif,Georgia,serif;font-size:21px;font-weight:600;color:#0F172A;letter-spacing:-0.01em;margin-bottom:14px;line-height:1.2}
+.article-section h3{font-family:ui-serif,Georgia,serif;font-size:14.5px;font-weight:600;color:#0F172A;margin-top:16px;margin-bottom:8px}
+.article-section p{font-size:14px;line-height:1.7;color:#334155;margin-bottom:12px}
+.article-section ul{padding-left:20px;margin-bottom:14px}
+.article-section li{font-size:13.5px;line-height:1.65;color:#334155;margin-bottom:6px}
+.article-illus{border-radius:12px;padding:18px;margin:6px 0 14px;background:linear-gradient(135deg,#F8FAFC,#EEF2F6);border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;min-height:200px}
+.article-illus svg{width:100%;height:100%;max-height:260px;shape-rendering:geometricPrecision}
+
+/* Urgency tiers (When to go to hospital) */
+.urgency-tier{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;border-radius:10px;margin-bottom:8px;font-size:13px;line-height:1.55;border:1px solid}
+.urgency-tier .dot{width:11px;height:11px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.urgency-tier strong{display:block;margin-bottom:3px;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;font-weight:600}
+
+/* Interventions list */
+.iv-group{margin-bottom:28px}
+.iv-group-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#64748B;font-weight:600;margin-bottom:10px;padding-left:4px}
+.iv-card{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;margin-bottom:10px;width:100%;text-align:left;font-family:inherit;transition:all 0.15s;cursor:pointer}
+.iv-card:hover{transform:translateY(-1px);border-color:#CBD5E1;box-shadow:0 4px 12px rgba(15,23,42,0.05)}
+.iv-card-body{flex:1;min-width:0}
+.iv-card-name{font-family:ui-serif,Georgia,serif;font-size:15.5px;font-weight:600;color:#0F172A;line-height:1.25;margin-bottom:4px}
+.iv-card-summary{font-size:12.5px;color:#475569;line-height:1.55}
+.iv-card-arrow{color:#94A3B8;font-size:16px;align-self:center;flex-shrink:0}
+
+/* Intervention detail content blocks */
+.iv-detail-section{margin-bottom:24px}
+.iv-detail-label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#64748B;font-weight:600;margin-bottom:8px}
+.iv-questions{background:#F0F9FF;border:1px solid #BAE6FD;border-radius:10px;padding:14px 16px;margin-bottom:20px}
+.iv-questions-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#075985;font-weight:600;margin-bottom:8px}
+.iv-questions li{font-size:13px;line-height:1.6;color:#0C4A6E;margin-bottom:6px}
+
+@media(max-width:720px){
+  .home-wrap{padding:28px 16px 48px;padding-bottom:max(48px,env(safe-area-inset-bottom))}
+  .home-hero h1{font-size:28px}
+  .home-card{padding:16px;gap:14px}
+  .home-card-icon{width:44px;height:44px;font-size:20px}
+  .home-card-body h2{font-size:18px}
+  .article-wrap{padding:22px 18px 48px;padding-bottom:max(48px,env(safe-area-inset-bottom))}
+  .article-title{font-size:25px}
+  .article-section h2{font-size:18px}
+  .article-illus{min-height:170px;padding:12px}
+}
 </style>
 </head>
 <body>
 <div id="app">
   <div id="header">
-    <div>
-      <h1>Labor Support Guide</h1>
-      <div id="header-sub">EVIDENCE-BASED POSITIONING &amp; COMFORT</div>
+    <button id="header-back" onclick="goBack()" aria-label="Back">← Back</button>
+    <div style="flex:1;min-width:0">
+      <h1 id="header-title">Labor Support Guide</h1>
+      <div id="header-sub">EVIDENCE-BASED PATIENT &amp; PROVIDER REFERENCE</div>
     </div>
   </div>
 
+  <main id="screen-host">
+
+  <!-- ─── Home screen ─── -->
+  <section id="screen-home" class="screen">
+    <div class="home-wrap">
+      <div class="home-hero">
+        <h1>Labor Support Guide</h1>
+        <p>Evidence-based education and clinical decision support for patients, families, and labor providers.</p>
+      </div>
+      <button class="home-card" onclick="goRoute('/intro')">
+        <div class="home-card-icon" style="background:#A8D5CC40;color:#0F766E">📖</div>
+        <div class="home-card-body">
+          <h2>Intro to Labor</h2>
+          <p>What labor is, the stages, and what your team means by dilation, effacement, station, and fetal position. Plain-language guide with diagrams.</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </button>
+      <button class="home-card" onclick="goRoute('/active')">
+        <div class="home-card-icon" style="background:#FED7AA80;color:#C2410C">🤰</div>
+        <div class="home-card-body">
+          <h2>Active Labor</h2>
+          <p>Clinical decision tool — adjust dilation, effacement, station, and fetal position to see evidence-based positioning and comfort recommendations.</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </button>
+      <button class="home-card" onclick="goRoute('/interventions')">
+        <div class="home-card-icon" style="background:#FBCFE8AA;color:#9D174D">💉</div>
+        <div class="home-card-body">
+          <h2>Common Questions &amp; Interventions</h2>
+          <p>What to know about Cytotec, Cervidil, Pitocin, Foley balloon, membrane sweep, epidural, and other things you may be asked about during labor.</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- ─── Intro to Labor screen ─── -->
+  <section id="screen-intro" class="screen">
+    <div class="article-wrap" id="intro-body"><!-- rendered by JS --></div>
+  </section>
+
+  <!-- ─── Active Labor screen (existing app) ─── -->
+  <section id="screen-active" class="screen">
   <div class="main-grid">
     <div class="input-col">
       <button id="mobile-toggle" onclick="toggleInputs()">
@@ -264,6 +380,19 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 
     </div>
   </div>
+  </section>
+
+  <!-- ─── Interventions list screen ─── -->
+  <section id="screen-interventions" class="screen">
+    <div class="article-wrap" id="interventions-body"><!-- rendered by JS --></div>
+  </section>
+
+  <!-- ─── Single intervention detail screen ─── -->
+  <section id="screen-intervention" class="screen">
+    <div class="article-wrap" id="intervention-body"><!-- rendered by JS --></div>
+  </section>
+
+  </main>
 
   <!-- Side panel -->
   <div id="panel-backdrop" onclick="closePanel()"></div>
@@ -503,10 +632,15 @@ function readURL(){
 }
 function writeURL(){
   try{
+    // Only update the URL if the Active Labor screen is the visible one;
+    // otherwise we'd clobber the user's current route while they're on Intro/Interventions.
+    if(window._currentRoute && window._currentRoute!=='active')return;
     var p=new URLSearchParams();
     p.set('d',S.dilation);p.set('e',S.effacement);p.set('s',S.station);
     p.set('ep',S.ep);p.set('fp',S.fp);p.set('c',S.cx);
-    history.replaceState(null,'','#'+p.toString());
+    window._routing=true;
+    history.replaceState(null,'','#/active?'+p.toString());
+    window._routing=false;
   }catch(e){}
 }
 
@@ -842,11 +976,493 @@ function esc(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// ─── INTRO TO LABOR (content + diagrams) ───
+var INTRO_ILLUS={
+  stages:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 140"><line x1="60" y1="60" x2="340" y2="60" stroke="#CBD5E1" stroke-width="2"/><g transform="translate(100,60)"><circle r="24" fill="#A8D5CC" stroke="#0F766E" stroke-width="2"/><text y="5" text-anchor="middle" font-size="15" font-weight="600" fill="#0F766E" font-family="serif">1</text><text y="50" text-anchor="middle" font-size="11" fill="#0F172A" font-family="monospace" font-weight="600">Dilation</text><text y="64" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">0 → 10 cm</text></g><g transform="translate(200,60)"><circle r="24" fill="#FED7AA" stroke="#C2410C" stroke-width="2"/><text y="5" text-anchor="middle" font-size="15" font-weight="600" fill="#C2410C" font-family="serif">2</text><text y="50" text-anchor="middle" font-size="11" fill="#0F172A" font-family="monospace" font-weight="600">Pushing</text><text y="64" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">baby is born</text></g><g transform="translate(300,60)"><circle r="24" fill="#FBCFE8" stroke="#9D174D" stroke-width="2"/><text y="5" text-anchor="middle" font-size="15" font-weight="600" fill="#9D174D" font-family="serif">3</text><text y="50" text-anchor="middle" font-size="11" fill="#0F172A" font-family="monospace" font-weight="600">Placenta</text><text y="64" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">5–30 min</text></g></svg>',
+
+  dilation:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 130"><g transform="translate(60,55)"><circle r="30" fill="#FCE7F3" stroke="#9D174D" stroke-width="2"/><circle r="2" fill="#fff" stroke="#9D174D" stroke-width="1"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">0 cm</text><text y="70" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">closed</text></g><g transform="translate(160,55)"><circle r="30" fill="#FCE7F3" stroke="#9D174D" stroke-width="2"/><circle r="10" fill="#fff" stroke="#9D174D" stroke-width="1"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">4 cm</text><text y="70" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">early active</text></g><g transform="translate(260,55)"><circle r="30" fill="#FCE7F3" stroke="#9D174D" stroke-width="2"/><circle r="18" fill="#fff" stroke="#9D174D" stroke-width="1"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">7 cm</text><text y="70" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">transition</text></g><g transform="translate(360,55)"><circle r="30" fill="#FCE7F3" stroke="#9D174D" stroke-width="2"/><circle r="26" fill="#fff" stroke="#9D174D" stroke-width="1"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">10 cm</text><text y="70" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">complete</text></g></svg>',
+
+  effacement:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 140"><g transform="translate(60,70)"><rect x="-14" y="-32" width="9" height="64" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><rect x="5" y="-32" width="9" height="64" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">0%</text><text y="68" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">thick</text></g><g transform="translate(160,70)"><rect x="-12" y="-26" width="8" height="52" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><rect x="4" y="-26" width="8" height="52" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">40%</text><text y="68" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">shortening</text></g><g transform="translate(260,70)"><rect x="-10" y="-14" width="6" height="28" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><rect x="4" y="-14" width="6" height="28" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">75%</text><text y="68" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">thin</text></g><g transform="translate(360,70)"><rect x="-9" y="-5" width="5" height="10" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><rect x="4" y="-5" width="5" height="10" fill="#FCE7F3" stroke="#9D174D" stroke-width="2" rx="2"/><text y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#0F172A" font-family="serif">100%</text><text y="68" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">paper-thin</text></g></svg>',
+
+  station:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240"><path d="M 110 50 Q 130 30 200 30 Q 270 30 290 50 L 305 130 L 200 215 L 95 130 Z" fill="#F1F5F9" stroke="#94A3B8" stroke-width="2"/><line x1="95" y1="80" x2="305" y2="80" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3 3"/><text x="315" y="84" font-size="10" fill="#94A3B8" font-family="monospace">-3</text><line x1="95" y1="125" x2="305" y2="125" stroke="#0F766E" stroke-width="1.5" stroke-dasharray="4 3"/><text x="315" y="129" font-size="11" font-weight="600" fill="#0F766E" font-family="monospace">0</text><text x="335" y="142" font-size="9" fill="#0F766E" font-family="monospace">spines</text><line x1="95" y1="170" x2="305" y2="170" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3 3"/><text x="315" y="174" font-size="10" fill="#94A3B8" font-family="monospace">+3</text><ellipse cx="200" cy="120" rx="36" ry="40" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><text x="200" y="125" text-anchor="middle" font-size="10" fill="#0F172A" font-family="serif" font-weight="600">baby</text><text x="200" y="232" text-anchor="middle" font-size="11" fill="#475569" font-family="monospace">Station 0 — baby\'s head at the ischial spines</text></svg>',
+
+  fetalPositions:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250"><text x="200" y="22" text-anchor="middle" font-size="11" fill="#475569" font-family="monospace">View from below — colored dot = back of baby\'s head</text><g transform="translate(80,90)"><ellipse rx="36" ry="42" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.5"/><circle r="20" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><circle cx="0" cy="-12" r="5" fill="#059669"/><text y="60" text-anchor="middle" font-size="11" font-weight="600" fill="#059669" font-family="serif">OA</text><text y="74" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">ideal</text></g><g transform="translate(200,90)"><ellipse rx="36" ry="42" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.5"/><circle r="20" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><circle cx="0" cy="12" r="5" fill="#EA580C"/><text y="60" text-anchor="middle" font-size="11" font-weight="600" fill="#EA580C" font-family="serif">OP</text><text y="74" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">back labor</text></g><g transform="translate(320,90)"><ellipse rx="36" ry="42" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.5"/><circle r="20" fill="#FCE7E0" stroke="#E8A87C" stroke-width="2"/><circle cx="-13" cy="0" r="5" fill="#7C3AED"/><text y="60" text-anchor="middle" font-size="11" font-weight="600" fill="#7C3AED" font-family="serif">OT</text><text y="74" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="monospace">side-facing</text></g><text x="200" y="200" text-anchor="middle" font-size="11" fill="#475569" font-family="monospace">OA: dot up = baby faces mom\'s spine = optimal</text><text x="200" y="218" text-anchor="middle" font-size="11" fill="#475569" font-family="monospace">OP: dot down = baby faces mom\'s belly = "sunny side up"</text><text x="200" y="236" text-anchor="middle" font-size="11" fill="#475569" font-family="monospace">OT: dot to side = head facing sideways</text></svg>'
+};
+
+var INTRO_SECTIONS=[
+  {id:'what',title:'What is labor?',illusKey:'stages',body:
+    '<p>Labor is the process your body uses to deliver your baby and the placenta. It happens in <strong>three stages</strong>:</p>'+
+    '<ul><li><strong>Stage 1 — Dilation:</strong> your cervix opens from 0 to 10 cm. This is the longest stage.</li>'+
+    '<li><strong>Stage 2 — Pushing:</strong> from full dilation until your baby is born.</li>'+
+    '<li><strong>Stage 3 — Placenta:</strong> from birth until the placenta delivers, usually 5–30 minutes.</li></ul>'+
+    '<p>For a first baby, total labor often lasts 12–18 hours; for later babies, often 4–8 hours. Wide variation is normal.</p>',
+    evidence:'ACOG Committee Opinion No. 766: Approaches to Limit Intervention During Labor and Birth (reaffirmed 2024). ACOG/SMFM Obstetric Care Consensus No. 1: Safe Prevention of the Primary Cesarean Delivery.'},
+
+  {id:'stage1',title:'Stage 1: Dilation',body:
+    '<p>Stage 1 is the work of getting your cervix from closed (0 cm) to fully open (10 cm). It has three sub-phases:</p>'+
+    '<h3>Early (latent) labor — 0 to about 6 cm</h3>'+
+    '<p>Contractions are usually 5–20 minutes apart and last 30–60 seconds. Many people stay home for this part, eating, hydrating, walking, resting. It often lasts hours to a day or more, especially for first babies.</p>'+
+    '<h3>Active labor — about 6 to 10 cm</h3>'+
+    '<p>Contractions get stronger, longer, and closer together — typically every 3–5 minutes lasting 60–90 seconds. This is usually when people head to the hospital or birth center.</p>'+
+    '<h3>Transition — the last few centimeters</h3>'+
+    '<p>The shortest but most intense part of Stage 1. Many people feel "I can\'t do this" — that feeling is a sign you\'re almost there. Stay with one contraction at a time.</p>',
+    evidence:'ACOG Practice Bulletin No. 49: Dystocia and Augmentation of Labor (reaffirmed 2018). Definitions of active labor onset have shifted to ≥ 6 cm based on Zhang et al., Obstet Gynecol 2010.'},
+
+  {id:'stage2',title:'Stage 2: Pushing',body:
+    '<p>Once your cervix is fully open (10 cm), you\'re in the pushing stage. It can last anywhere from a few minutes to several hours — often longer with a first baby or with an epidural.</p>'+
+    '<p>Two valid approaches:</p>'+
+    '<ul><li><strong>Spontaneous pushing</strong> — you push when you feel the urge, usually with each contraction.</li>'+
+    '<li><strong>"Laboring down" / breathing baby down</strong> — waiting until your body gives a strong urge before active pushing. Especially common with epidurals.</li></ul>'+
+    '<p>Position changes — hands-and-knees, side-lying, squatting, upright — often help baby descend and rotate.</p>',
+    evidence:'ACOG Committee Opinion No. 766 (2019, reaffirmed 2024). AWHONN: Nursing Care and Management of the Second Stage of Labor (3rd ed., 2014).'},
+
+  {id:'stage3',title:'Stage 3: Placenta',body:
+    '<p>After your baby is born, your uterus keeps contracting (much milder) to deliver the placenta. This usually takes 5–30 minutes.</p>'+
+    '<p>Your provider may give a small dose of oxytocin (Pitocin) in the muscle or IV right after birth to reduce postpartum bleeding — this is called <strong>active management of the third stage</strong> and is the standard of care.</p>'+
+    '<p>You can often hold your baby skin-to-skin during this stage. The cord is typically clamped after 30–60 seconds (delayed cord clamping) for full-term babies.</p>',
+    evidence:'ACOG Committee Opinion No. 814: Delayed Umbilical Cord Clamping After Birth (2020). WHO Recommendations on Postpartum Hemorrhage Prevention (2012).'},
+
+  {id:'dilation',title:'What does dilation mean?',illusKey:'dilation',body:
+    '<p>Your <strong>cervix</strong> is the narrow opening at the bottom of your uterus. During pregnancy it\'s closed and thick. During labor it has to <strong>open</strong> (dilate) and <strong>thin out</strong> (efface) to let your baby pass through.</p>'+
+    '<p>Dilation is measured in <strong>centimeters, from 0 to 10</strong>. When your provider does a cervical exam, they\'re feeling for how many fingers wide your cervix is:</p>'+
+    '<ul><li><strong>0–3 cm:</strong> early / latent labor</li>'+
+    '<li><strong>4–5 cm:</strong> early active labor</li>'+
+    '<li><strong>6–9 cm:</strong> active labor / transition</li>'+
+    '<li><strong>10 cm:</strong> complete — time to push</li></ul>'+
+    '<p>Dilation is not always steady — it can stall and then jump.</p>',
+    evidence:'ACOG Practice Bulletin No. 49 (reaffirmed 2018). Friedman curve has been largely replaced by Zhang labor curves (Obstet Gynecol 2010;116:1281).'},
+
+  {id:'effacement',title:'What is effacement?',illusKey:'effacement',body:
+    '<p>The cervix doesn\'t just open — it also <strong>thins out</strong>. Effacement measures that thinning, as a percentage from 0% (thick and long) to 100% (paper-thin).</p>'+
+    '<p>For a first baby, the cervix usually has to thin out <em>before</em> it can fully open. For a second or later baby, effacement and dilation often happen at the same time.</p>'+
+    '<p>You may hear something like <em>"4 cm, 80%, –2 station"</em> — that means 4 cm dilated, 80% effaced, baby\'s head 2 cm above the ischial spines.</p>',
+    evidence:'ACOG Practice Bulletin No. 107: Induction of Labor (reaffirmed 2024) — Bishop score components include dilation, effacement, station, cervical consistency, and position.'},
+
+  {id:'station',title:'What is station?',illusKey:'station',body:
+    '<p>Station tells you <strong>where your baby is</strong> in your pelvis. It uses a scale from –5 (high) to +5 (just about out), with <strong>0</strong> being a landmark called the <em>ischial spines</em> — the narrowest point of your bony pelvis.</p>'+
+    '<ul><li><strong>–3 or higher:</strong> baby is still high — "floating" or just beginning to descend</li>'+
+    '<li><strong>0:</strong> baby\'s head is <em>engaged</em> — at the spines</li>'+
+    '<li><strong>+1 to +3:</strong> head is descending through the mid-pelvis</li>'+
+    '<li><strong>+4 to +5:</strong> head is visible at the perineum / crowning</li></ul>'+
+    '<p>Position changes — walking, squatting, lunging, hands and knees — help your baby descend.</p>',
+    evidence:'ACOG Practice Bulletin No. 154: Operative Vaginal Birth (2015) defines station relative to the ischial spines (–5 to +5 cm).'},
+
+  {id:'fetalpos',title:'Fetal position',illusKey:'fetalPositions',body:
+    '<p>"Fetal position" is which way your baby is facing inside your pelvis. The most common positions during labor:</p>'+
+    '<h3>OA — Occiput Anterior (ideal)</h3>'+
+    '<p>Baby is head-down, facing your spine, with the back of the head (occiput) toward your belly button. This is the easiest position for delivery.</p>'+
+    '<h3>OP — Occiput Posterior ("sunny side up")</h3>'+
+    '<p>Baby is head-down but facing your belly. This often causes <strong>back labor</strong> — pain felt mostly in the lower back. Many OP babies rotate to OA during labor; position changes (especially hands-and-knees) help.</p>'+
+    '<h3>OT — Occiput Transverse</h3>'+
+    '<p>Baby\'s head is sideways. Usually a transitional position that resolves as labor progresses.</p>',
+    evidence:'AWHONN: Fetal Heart Monitoring Principles and Practices (6th ed.). Simkin P, Ancheta R: Labor Progress Handbook, 5th ed., 2024.'},
+
+  {id:'whentogo',title:'When to go to the hospital',body:
+    '<p>For a healthy, low-risk first pregnancy, the most common guidance is the <strong>5-1-1 rule</strong>:</p>'+
+    '<div class="urgency-tier" style="background:#FEF3C7;border-color:#FCD34D"><span class="dot" style="background:#D97706"></span><div><strong style="color:#92400E">Routine — call your provider</strong>Contractions every <strong>5</strong> minutes, lasting <strong>1</strong> minute, for <strong>1</strong> hour straight. (For later babies, your provider may give you 7-1-1 or other guidance.)</div></div>'+
+    '<div class="urgency-tier" style="background:#FEE2E2;border-color:#FCA5A5"><span class="dot" style="background:#DC2626"></span><div><strong style="color:#991B1B">Go now — do not wait</strong>Water breaks <strong>with bleeding</strong> or with green/brown fluid. Heavy vaginal bleeding (more than a heavy period). Sudden severe headache, vision changes, or upper-belly pain. A noticeable <strong>decrease in baby\'s movement</strong>. Severe constant pain between contractions.</div></div>'+
+    '<div class="urgency-tier" style="background:#DBEAFE;border-color:#93C5FD"><span class="dot" style="background:#2563EB"></span><div><strong style="color:#1E40AF">When in doubt — call</strong>Your labor and delivery unit would rather hear from you twice than not at all. If something feels off, call.</div></div>',
+    evidence:'ACOG FAQ: Labor, Delivery, and Postpartum Care. AWHONN: When to Go to the Hospital. Individual hospital guidance may differ — follow your own provider\'s instructions.'}
+];
+
+function renderIntroScreen(){
+  var html='<div class="article-eyebrow">Patient guide</div>'+
+    '<h1 class="article-title">Intro to Labor</h1>'+
+    '<p class="article-lede">A plain-language guide to what happens during labor and what the words your team uses really mean. Reviewed against ACOG and AWHONN guidelines.</p>';
+  INTRO_SECTIONS.forEach(function(s){
+    html+='<div class="article-section" id="intro-'+s.id+'">';
+    html+='<h2>'+esc(s.title)+'</h2>';
+    if(s.illusKey&&INTRO_ILLUS[s.illusKey]){
+      html+='<div class="article-illus">'+INTRO_ILLUS[s.illusKey]+'</div>';
+    }
+    html+=s.body;
+    if(s.evidence){
+      html+='<div class="evidence-block" style="border-left-color:#0F766E;margin-top:14px">'+esc(s.evidence)+'</div>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('intro-body').innerHTML=html;
+}
+
+// ─── INTERVENTIONS (content + render) ───
+var INTERVENTION_GROUPS=['Cervical ripening','Membrane management','Labor augmentation','Pain management','Monitoring','Operative delivery'];
+
+// Color themes by group
+var IV_COLORS={
+  'Cervical ripening':{c:'#9D174D',bg:'#FBCFE8AA'},
+  'Membrane management':{c:'#0E7490',bg:'#A5F3FC80'},
+  'Labor augmentation':{c:'#0F766E',bg:'#A8D5CC60'},
+  'Pain management':{c:'#6366F1',bg:'#C7D2FE80'},
+  'Monitoring':{c:'#2563EB',bg:'#BFDBFE80'},
+  'Operative delivery':{c:'#991B1B',bg:'#FECACA80'}
+};
+
+var INTERVENTIONS=[
+  {slug:'cytotec',name:'Misoprostol (Cytotec)',group:'Cervical ripening',icon:'💊',
+   summary:'A small pill placed in the vagina or taken by mouth that softens and starts opening the cervix.',
+   whatItIs:'Misoprostol is a synthetic prostaglandin E1 used off-label for cervical ripening and labor induction. It can be placed vaginally, in the cheek, under the tongue, or swallowed. It is inexpensive and effective; one of the most commonly used induction agents worldwide.',
+   whyOffered:['Induction of labor at 39 weeks or later for medical or elective reasons','Cervical ripening when your cervix is not yet ready (low Bishop score)','Often started overnight to prepare for active induction in the morning'],
+   howDone:['Cervical exam to confirm you\'re not already in active labor','Small tablet (typically 25 mcg vaginally, or 50–100 mcg orally) is placed','Continuous fetal heart-rate monitoring for at least 2 hours after','Dose may be repeated every 3–6 hours until labor begins or 24 hours pass'],
+   whatToExpect:'Most people begin having stronger contractions within 1–4 hours of a dose. Many go into active labor without needing IV Pitocin afterward. Some need a second or third dose.',
+   sideEffectsCommon:['Cramping and contractions','Nausea or diarrhea','Chills or low-grade fever','Shivering'],
+   sideEffectsSerious:'Tachysystole (too-frequent contractions, more than 5 in 10 minutes) occurs in roughly 1 in 20 patients and can reduce baby\'s oxygen. Should NOT be used if you have had a prior C-section or major uterine surgery — the risk of uterine rupture is too high.',
+   questionsToAsk:['Why are you recommending Cytotec rather than Cervidil or a Foley balloon?','Will the dose be vaginal or oral?','Will I need IV Pitocin afterward?','Can I get up and walk after a dose?'],
+   source:'ACOG Practice Bulletin No. 107: Induction of Labor (reaffirmed 2024). Alfirevic et al., Cochrane Review on vaginal misoprostol for induction (2014).'},
+
+  {slug:'cervidil',name:'Dinoprostone (Cervidil)',group:'Cervical ripening',icon:'🎗',
+   summary:'A medicated insert (similar to a small tampon with a string) placed against the cervix to ripen it slowly over 12 hours.',
+   whatItIs:'Cervidil is a prostaglandin E2 insert that releases medication gradually over 12 hours. It has a pull-string for easy removal. FDA-approved specifically for cervical ripening — unlike Cytotec, which is used off-label.',
+   whyOffered:['Induction when your cervix is not yet ready','Often used overnight before starting Pitocin in the morning','Preferred at some hospitals over misoprostol because of the removable design'],
+   howDone:['Cervical exam','Insert placed high in the vagina against the cervix','You stay flat in bed for ~30 minutes; then can move around the bed','Continuous fetal monitoring','Removed at 12 hours, when active labor begins, or earlier if any concerns'],
+   whatToExpect:'Contractions usually begin within 6–12 hours. Some people go into active labor; others need Pitocin started after the insert is removed.',
+   sideEffectsCommon:['Cramping and mild contractions','Nausea','Mild backache'],
+   sideEffectsSerious:'Tachysystole (~5%, less common than with misoprostol). Same precaution: should not be used with a prior C-section or major uterine surgery. The removable string is an advantage if contractions become too strong.',
+   questionsToAsk:['How long will it stay in?','Will I be able to walk?','When will Pitocin start after removal?','Can it be taken out quickly if my contractions get too strong?'],
+   source:'ACOG Practice Bulletin No. 107 (reaffirmed 2024). Cervidil prescribing information.'},
+
+  {slug:'foley',name:'Foley balloon (mechanical dilation)',group:'Cervical ripening',icon:'🎈',
+   summary:'A small balloon placed through the cervix and filled with sterile water — opens the cervix gradually, no medication needed.',
+   whatItIs:'A thin catheter with a balloon on the end is passed through the cervix and filled with 30–80 mL of sterile water. The balloon\'s steady mechanical pressure opens the cervix from the inside. No prostaglandin medication is involved.',
+   whyOffered:['Cervical ripening when medication is not preferred or not safe (prior C-section, twins, certain medical conditions)','When a non-medication approach is preferred','As effective as misoprostol or dinoprostone for ripening, with a different risk profile'],
+   howDone:['Cervical exam','Sterile speculum exam','Catheter passed gently through the cervix','Balloon inflated with sterile water','Catheter taped to your thigh so it doesn\'t fall out unexpectedly','Falls out on its own once cervix opens to about 3–4 cm — usually 6–12 hours'],
+   whatToExpect:'Mild cramping or pelvic pressure. Most people can walk around. Many go into spontaneous labor as the balloon falls out; others have Pitocin started afterward.',
+   sideEffectsCommon:['Cramping','Low backache','Light spotting'],
+   sideEffectsSerious:'Infection (low risk with sterile placement). Rupture of membranes during placement. Cord prolapse if water breaks while baby is still high (rare). Generally considered the safest ripening method for people attempting VBAC.',
+   questionsToAsk:['How much water will go in the balloon?','Can I walk around with it in?','What\'s the plan if it doesn\'t fall out within 12 hours?','Is this safer than Cytotec for me specifically?'],
+   source:'ACOG Practice Bulletin No. 107 (reaffirmed 2024). Jozwiak et al., Cochrane Review (2012): mechanical methods equally effective as prostaglandins with fewer cases of tachysystole.'},
+
+  {slug:'membrane-sweep',name:'Membrane sweep ("stripping")',group:'Membrane management',icon:'↻',
+   summary:'A bedside exam in which the provider uses a gloved finger to gently separate the amniotic membranes from the lower uterus.',
+   whatItIs:'During a regular cervical exam, the provider sweeps a finger between the amniotic sac and the inside of the cervix. This releases natural prostaglandins from the membranes and can encourage labor to start on its own. Typically offered from 39 weeks onward.',
+   whyOffered:['To encourage labor to start naturally','Often offered weekly at term to reduce the chance of needing a formal induction','Sometimes offered when you\'re past your due date'],
+   howDone:['Routine cervical exam','If the cervix is open enough to admit a finger, the provider rotates a finger between the membranes and the lower uterus','Takes 1–2 minutes; commonly uncomfortable but brief'],
+   whatToExpect:'Crampy contractions and light spotting for ~24 hours afterward. Roughly 1 in 8 people go into labor within 48 hours. It doesn\'t always work — and that doesn\'t mean anything is wrong.',
+   sideEffectsCommon:['Cramping','Light spotting','Irregular contractions'],
+   sideEffectsSerious:'Accidental rupture of membranes (water breaking) is uncommon. Infection is theoretically possible but rare. Should generally be avoided if you have placenta previa, low-lying placenta, active genital herpes, or other conditions your provider identifies.',
+   questionsToAsk:['Will it hurt?','How likely is it to work for me?','Are there reasons not to try it for me specifically?','What\'s the plan if it doesn\'t work?'],
+   source:'ACOG Committee Opinion No. 818: Reducing Iatrogenic Risks Associated with Labor Induction. Finucane et al., Cochrane Review (2020): membrane sweeping reduces need for formal induction.'},
+
+  {slug:'amniotomy',name:'Amniotomy (breaking the water)',group:'Membrane management',icon:'💧',
+   summary:'A small plastic hook is used to make a tear in the amniotic sac — usually to speed up labor or to allow internal monitoring.',
+   whatItIs:'Artificial Rupture of Membranes (AROM). During a cervical exam, the provider passes a thin plastic hook (amnihook) through the cervix and makes a small opening in the amniotic sac. Painless to you. Cannot be undone.',
+   whyOffered:['To speed up a slow labor','To allow placement of an internal fetal scalp electrode for more accurate heart-rate tracking','To allow placement of an intrauterine pressure catheter to measure contraction strength'],
+   howDone:['Cervical exam to confirm baby\'s head is well-applied to the cervix','Thin plastic hook passed gently through the cervix','Sac opened — warm fluid releases','Continuous fetal monitoring confirms baby is doing well'],
+   whatToExpect:'Contractions usually intensify within minutes to an hour. The "clock" starts on labor — most providers want delivery within 18–24 hours of water-breaking to limit infection risk.',
+   sideEffectsCommon:['Stronger contractions','Continuous warm fluid leak throughout labor'],
+   sideEffectsSerious:'Cord prolapse (cord slipping out before baby) — rare, but more likely if baby is still high. Increased infection risk if delivery is delayed many hours. Cannot be undone — once broken, baby needs to be delivered.',
+   questionsToAsk:['Why right now — what are you hoping it will do?','Is baby\'s head low enough?','What if labor still doesn\'t progress after this?','Will I have to stay in bed?'],
+   source:'ACOG Practice Bulletin No. 49: Dystocia and Augmentation of Labor (reaffirmed 2018). Smyth et al., Cochrane Review (2013): routine early amniotomy does NOT shorten spontaneous labor.'},
+
+  {slug:'pitocin',name:'Oxytocin (Pitocin)',group:'Labor augmentation',icon:'💉',
+   summary:'IV medication that starts contractions or makes weak contractions stronger and more regular.',
+   whatItIs:'Synthetic form of the natural hormone oxytocin, which your body makes to cause contractions. Given through an IV pump and titrated up slowly. Used for both starting labor (induction) and strengthening labor (augmentation).',
+   whyOffered:['Induction: to start labor for medical or elective reasons at 39 weeks or later','Augmentation: to strengthen contractions when labor has slowed or stalled','After delivery: a small dose helps the uterus contract and reduces postpartum bleeding (third stage of labor)'],
+   howDone:['IV line placed','Continuous fetal monitoring required','Started at a very low dose (1–2 milliunits per minute)','Increased every 15–30 minutes until contractions are every 2–3 minutes lasting 60–90 seconds','Can be turned down or paused at any time'],
+   whatToExpect:'Pitocin contractions often feel sharper and more abrupt than natural ones — they don\'t build up as gradually. Many people request an epidural after Pitocin is started. The dose can be lowered if contractions are too intense.',
+   sideEffectsCommon:['Stronger, closer-together contractions','Nausea','Fluid retention'],
+   sideEffectsSerious:'Tachysystole (more than 5 contractions in 10 minutes) can reduce baby\'s oxygen — the pump is turned down or off quickly. Very rarely, uterine rupture, especially in women with a prior C-section. Excess water retention with very high doses over many hours.',
+   questionsToAsk:['Why are we starting Pitocin now?','Can I labor without it for another hour first?','Can the dose be paused if I need a break?','Do I need to stay in bed?'],
+   source:'ACOG Practice Bulletin No. 107 (reaffirmed 2024). ACOG/SMFM Obstetric Care Consensus No. 1: Safe Prevention of the Primary Cesarean Delivery.'},
+
+  {slug:'epidural',name:'Epidural anesthesia',group:'Pain management',icon:'🧘',
+   summary:'Continuous numbing medicine delivered through a small tube in your lower back — the most effective labor pain relief available. Ask early: from "yes" to relief is often 30–60 minutes.',
+   whatItIs:'An anesthesiologist or nurse anesthetist (CRNA) places a tiny soft catheter into the epidural space just outside the spinal cord in your lower back. A low-dose mix of local anesthetic and a small amount of opioid is delivered continuously, numbing the nerves that carry labor pain.',
+   whyOffered:['At your request, any time during labor — there is no specific "too late" cutoff, but the process takes time','When prolonged labor is causing exhaustion','To allow rest during a long labor','Often used during inductions and Pitocin labors'],
+   howDone:['IV fluids started','You sit up or curl on your side','Lower back cleaned with antiseptic; numbing local injected','Epidural needle placed; the soft catheter threaded in; needle removed','Test dose given to confirm correct placement','Continuous infusion started — most people feel significant relief within 10–15 minutes'],
+   whatToExpect:'Significant pain relief — often near complete. Legs feel heavy or numb; you stay in bed (a bladder catheter is usually placed). You stay fully awake and can push when the time comes. Blood pressure dropping briefly is common and is treated with IV fluid.',
+   sideEffectsCommon:['Low blood pressure (treated with fluids and medication)','Itching','Shivering','Mild fever','Urinary retention — bladder catheter usually placed','Slightly longer pushing stage'],
+   sideEffectsSerious:'Post-dural-puncture headache (~1%, usually treated). One-sided or patchy block (re-positioning or replacement may help). Very rare: nerve injury, infection, bleeding around the spine. Multiple large studies show epidurals do NOT increase the C-section rate.',
+   questionsToAsk:['How long until full effect?','Can I still push effectively when the time comes?','What if it only numbs one side — what do you do then?','Can I be up and walking with the epidural?','How long until it wears off after delivery?'],
+   source:'ACOG Practice Bulletin No. 209: Obstetric Analgesia and Anesthesia (2019, reaffirmed 2024). ACOG Committee Opinion No. 339: Analgesia and Cesarean Delivery Rates.'},
+
+  {slug:'iv-opioids',name:'IV opioids',group:'Pain management',icon:'💊',
+   summary:'Pain medication given through your IV — takes the edge off but does not fully numb you.',
+   whatItIs:'Short-acting opioids — typically fentanyl, nalbuphine, or morphine — given through the IV. They reduce the perception of pain but do not eliminate it. Useful when an epidural isn\'t available, isn\'t wanted, or as a bridge until one can be placed.',
+   whyOffered:['Pain relief in early or mid-labor','As a bridge until an epidural can be placed','When an epidural is not possible (low platelets, infection at the site, certain blood thinners, anatomic issues)'],
+   howDone:['Single dose pushed through your IV by the nurse','Onset within minutes','Lasts roughly 1–3 hours depending on the medication chosen'],
+   whatToExpect:'A "floaty" or drowsy feeling. Some nausea. Pain is reduced but not gone. Most effective if given with time to wear off before delivery (an hour or two before pushing) so the medication doesn\'t make the baby sleepy.',
+   sideEffectsCommon:['Sleepiness','Nausea','Itching','Dizziness'],
+   sideEffectsSerious:'If given close to delivery, the baby may be sleepy or have slow breathing at birth — this can be reversed with a medication called naloxone. Significantly less effective than an epidural. Does not slow labor.',
+   questionsToAsk:['How long will it last?','Will it make my baby sleepy?','Can I still have an epidural later?','How close to delivery is too close for this medication?'],
+   source:'ACOG Practice Bulletin No. 209: Obstetric Analgesia and Anesthesia (2019, reaffirmed 2024).'},
+
+  {slug:'nitrous',name:'Nitrous oxide ("laughing gas")',group:'Pain management',icon:'💨',
+   summary:'A 50/50 mix of nitrous oxide and oxygen that you self-administer through a mask during contractions.',
+   whatItIs:'Self-administered inhaled gas (50% nitrous oxide, 50% oxygen). You hold the mask yourself, breathe in during the contraction, and put it down between. No needles. No effect on baby.',
+   whyOffered:['Mild to moderate labor pain relief','While waiting for an epidural to be placed','For people who don\'t want or can\'t have an epidural','Available at a growing number of US hospitals'],
+   howDone:['Hospital provides a self-administered mask','Start breathing through it about 30 seconds before a contraction peaks (it takes ~30 seconds to take effect)','Stop between contractions','Effect wears off within 1 minute of stopping'],
+   whatToExpect:'A lighter, "floaty" feeling. Less pain reduction than an epidural — but you stay fully alert, mobile, and in control. You can stop at any time. No effect on baby. No effect on the progress of labor.',
+   sideEffectsCommon:['Mild nausea','Dizziness','Dry mouth','Drowsiness — all gone within minutes of stopping'],
+   sideEffectsSerious:'Rare. Should not be used if you have a B12 deficiency, certain inner-ear or eye conditions, or in the very rare situation where it could mask a needed anesthesia decision.',
+   questionsToAsk:['Is nitrous available at this hospital?','Can I switch to an epidural later if I want?','Are there reasons I shouldn\'t use it?'],
+   source:'ACOG Committee Opinion No. 766: Approaches to Limit Intervention During Labor and Birth (reaffirmed 2024). Likis et al., Anesth Analg 2014: long-standing safety record.'},
+
+  {slug:'non-pharm',name:'Non-pharmacologic comfort measures',group:'Pain management',icon:'🤲',
+   summary:'Position changes, hydrotherapy, massage, breathing, sterile water injections, and continuous support — evidence-based comfort without medication.',
+   whatItIs:'A bundle of techniques you and your support team can use throughout labor: walking, birth ball, hands-and-knees position, peanut ball (with an epidural), water immersion in tub or shower, warm or cold packs, sterile water injections for back pain, massage, focused breathing, low vocalization, and continuous one-to-one support from a partner, nurse, or doula.',
+   whyOffered:['Effective for many people','No side effects on baby','Useful in early labor, alongside other pain relief, or as the primary approach','Continuous one-to-one support is one of the single most effective interventions in obstetrics'],
+   howDone:['Make a labor "playlist" of techniques you\'d like to try','Change positions every 20–30 minutes','Use the shower or tub once active labor is established','Consider hiring a doula — there is strong evidence of better outcomes'],
+   whatToExpect:'Active engagement throughout labor. Lower rates of medical intervention. Effective pain reduction for many — though not as numbing as an epidural. The single biggest difference is having a continuous support person.',
+   sideEffectsCommon:['None of significance'],
+   sideEffectsSerious:'None. Some hydrotherapy precautions apply (avoid full immersion if waters are broken in some hospitals).',
+   questionsToAsk:['Can my partner stay with me throughout?','Do you have a birth ball, peanut ball, tub, and shower available?','Is sterile water injection an option for back labor?','Is a doula allowed in addition to my partner?'],
+   source:'ACOG Committee Opinion No. 766 (reaffirmed 2024). Bohren et al., Cochrane Review (2017): continuous labor support reduces cesarean by ~25%.'},
+
+  {slug:'monitoring',name:'External vs. internal fetal monitoring',group:'Monitoring',icon:'📊',
+   summary:'Tracking baby\'s heart rate and your contractions — either with belts on your belly (external) or with sensors placed inside the uterus (internal).',
+   whatItIs:'<strong>External:</strong> two belts around your belly — one with a Doppler ultrasound for baby\'s heart rate, the other with a pressure sensor for contractions. <strong>Internal:</strong> a tiny wire (fetal scalp electrode) attached to baby\'s scalp for the heart rate, and/or a thin catheter inside the uterus to measure contraction strength. Internal requires your water to be broken.',
+   whyOffered:['External monitoring is the routine starting point on admission','Internal monitoring is used when external readings are unreliable (large body habitus, very active baby), when more accurate contraction strength is needed, or when the heart-rate tracing needs more detail'],
+   howDone:['External: belts placed in the first minutes of admission','Internal: cervix must be at least slightly open and water must be broken; sensors placed gently during a cervical exam — painless to you'],
+   whatToExpect:'External: you can typically move within reach of the monitor (some hospitals have wireless/telemetry units that let you walk freely). Internal: you must stay in bed; readings are much more reliable.',
+   sideEffectsCommon:['External: discomfort from the belts; signal loss when you move','Internal: a small mark or scratch on baby\'s scalp that heals on its own'],
+   sideEffectsSerious:'Internal: very small risks of infection or scalp injury. <strong>Continuous</strong> monitoring (compared to intermittent listening) is associated with more C-sections without improving outcomes in healthy, low-risk labor — but continuous monitoring is the standard for induced labor, epidurals, and any high-risk situation.',
+   questionsToAsk:['Can I be on intermittent monitoring instead of continuous?','Is wireless / telemetry monitoring available so I can walk?','Why are you recommending we switch to internal?','How concerning is the tracing right now?'],
+   source:'ACOG Practice Bulletin No. 106: Intrapartum Fetal Heart Rate Monitoring: Nomenclature, Interpretation, and General Management Principles. ACOG Practice Bulletin No. 116: Management of Intrapartum FHR Tracings.'},
+
+  {slug:'vacuum',name:'Vacuum-assisted delivery',group:'Operative delivery',icon:'⬇',
+   summary:'A soft suction cup placed on the back of baby\'s head to help guide the head out as you push.',
+   whatItIs:'A device with a soft suction cup is placed on the back of baby\'s head; the provider applies gentle traction in coordination with your pushes during contractions. Used in the second stage when delivery is close but help is needed.',
+   whyOffered:['Prolonged second stage of labor','Concerning heart-rate tracing during pushing','Maternal exhaustion that prevents effective pushing','When a vaginal delivery looks feasible — baby\'s head must be low (typically +2 station or lower) and the position known'],
+   howDone:['Empty bladder','Adequate anesthesia confirmed','Episiotomy considered (not always done)','Cup placed on the back of baby\'s head','Gentle traction applied with each contraction while you push','Three "pop-offs" of the cup, or 20 minutes total, is typically the maximum'],
+   whatToExpect:'Baby will often have a temporary swelling on the back of the head (a "chignon" or caput) that resolves over a few days.',
+   sideEffectsCommon:['Baby: temporary scalp swelling, mild bruising','Maternal: higher rate of perineal tears, more episiotomies'],
+   sideEffectsSerious:'Baby: cephalohematoma (collection of blood under the scalp), retinal hemorrhage, rare scalp lacerations or skull injury. Maternal: severe (3rd or 4th degree) perineal tears. If vacuum fails to deliver, a C-section follows.',
+   questionsToAsk:['Do you do vacuum or forceps more often here?','What\'s the alternative — can we try a position change first?','What happens if it doesn\'t work?'],
+   source:'ACOG Practice Bulletin No. 154: Operative Vaginal Birth (2015, reaffirmed 2024).'},
+
+  {slug:'forceps',name:'Forceps',group:'Operative delivery',icon:'🥄',
+   summary:'Two curved metal blades placed around baby\'s head to help guide the head out — used less often than vacuum in most US hospitals.',
+   whatItIs:'Two curved metal blades shaped to fit around baby\'s head. The provider applies gentle, coordinated traction during contractions while you push. Used for the same indications as vacuum; forceps are preferred in some specific situations.',
+   whyOffered:['Same indications as vacuum-assisted delivery','Preferred over vacuum in some situations: face presentation, certain mid-pelvic deliveries, very premature babies, when vacuum cannot get good seal'],
+   howDone:['Empty bladder','Adequate anesthesia (often epidural top-up)','Episiotomy is more often performed than with vacuum','Blades placed one at a time and locked','Gentle traction applied with each contraction while you push'],
+   whatToExpect:'Baby may have temporary marks on the cheeks or temples that fade within days.',
+   sideEffectsCommon:['Baby: temporary facial marks','Maternal: higher rate of perineal tears (including 3rd/4th degree), more episiotomies'],
+   sideEffectsSerious:'Baby: facial nerve injury (usually temporary), rare skull or facial injury. Maternal: severe perineal trauma; bladder, urethral, or bowel injury (rare).',
+   questionsToAsk:['Are you experienced with forceps?','Why forceps rather than vacuum?','Could we try a different position or wait a little longer first?'],
+   source:'ACOG Practice Bulletin No. 154: Operative Vaginal Birth (2015, reaffirmed 2024).'},
+
+  {slug:'cesarean',name:'Cesarean delivery',group:'Operative delivery',icon:'🏥',
+   summary:'Surgical delivery of your baby through an incision in your lower belly and uterus.',
+   whatItIs:'A surgical procedure done with regional anesthesia (an epidural or spinal — you\'re awake but numb from the chest down) or, rarely, general anesthesia. Takes about 45–60 minutes total; baby is usually out within 5–15 minutes from the start.',
+   whyOffered:['Planned: prior C-section (in some cases), breech baby, placenta previa, twins or triplets, certain medical conditions','Unplanned during labor: labor not progressing despite adequate time and contractions, concerning heart-rate tracing, cord prolapse, placental abruption'],
+   howDone:['Epidural or spinal placed (or topped-up if already in place)','Bladder catheter','Belly washed; surgical drape goes up between you and the surgical field','Horizontal "bikini" incision low on the belly (usually)','Layers opened gently; baby delivered','Placenta delivered; uterus closed; layers closed','Skin closed with stitches or staples'],
+   whatToExpect:'Pressure and tugging but no sharp pain. Your support person can be with you. Baby is shown right away; skin-to-skin in the operating room is often possible. Recovery is longer than vaginal birth — usually 2–4 days in the hospital and 4–6 weeks of healing.',
+   sideEffectsCommon:['Incision pain','Gas pain','Fatigue','Slow first bowel movement','Longer hospital stay (2–4 days)'],
+   sideEffectsSerious:'Infection, bleeding, blood clots, injury to bladder or bowel (rare). Placental issues (placenta previa, accreta) in future pregnancies are more common after a C-section. Overall higher risk than an uncomplicated vaginal birth — but a C-section can be lifesaving when needed.',
+   questionsToAsk:['Is this an emergency or do we have time to talk about options?','What kind of anesthesia will I have?','Can my partner be with me?','Can I have skin-to-skin in the operating room?','Can the umbilical cord be delayed-clamped?','What does this mean for future deliveries — am I a VBAC candidate?'],
+   source:'ACOG Practice Bulletin No. 205: Vaginal Birth After Cesarean Delivery (2019, reaffirmed 2024). ACOG/SMFM Obstetric Care Consensus No. 1: Safe Prevention of the Primary Cesarean Delivery.'}
+];
+
+function renderInterventionsListScreen(){
+  var groups={};
+  INTERVENTIONS.forEach(function(iv){if(!groups[iv.group])groups[iv.group]=[];groups[iv.group].push(iv);});
+  var html='<div class="article-eyebrow">Patient reference</div>'+
+    '<h1 class="article-title">Common Questions &amp; Interventions</h1>'+
+    '<p class="article-lede">Plain-language explanations of the medications, procedures, and choices that may come up during labor. Tap any item for the full page.</p>';
+  INTERVENTION_GROUPS.forEach(function(g){
+    var items=groups[g]||[];
+    if(!items.length)return;
+    var theme=IV_COLORS[g]||{c:'#0F766E',bg:'#A8D5CC40'};
+    html+='<div class="iv-group">';
+    html+='<div class="iv-group-label" style="color:'+theme.c+'">'+esc(g)+'</div>';
+    items.forEach(function(iv){
+      html+='<button class="iv-card" onclick="goRoute(\'/interventions/'+iv.slug+'\')">'+
+        '<div style="background:'+theme.bg+';color:'+theme.c+';width:42px;height:42px;font-size:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+iv.icon+'</div>'+
+        '<div class="iv-card-body">'+
+        '<div class="iv-card-name">'+esc(iv.name)+'</div>'+
+        '<div class="iv-card-summary">'+esc(iv.summary)+'</div>'+
+        '</div>'+
+        '<div class="iv-card-arrow">→</div>'+
+        '</button>';
+    });
+    html+='</div>';
+  });
+  document.getElementById('interventions-body').innerHTML=html;
+}
+
+function renderInterventionDetailScreen(slug){
+  var iv=null;
+  for(var i=0;i<INTERVENTIONS.length;i++){if(INTERVENTIONS[i].slug===slug){iv=INTERVENTIONS[i];break;}}
+  if(!iv){
+    document.getElementById('intervention-body').innerHTML=
+      '<div class="article-eyebrow">Not found</div>'+
+      '<h1 class="article-title">Intervention not found</h1>'+
+      '<p>Try the <a onclick="goRoute(\'/interventions\')" style="color:#0F766E;cursor:pointer;text-decoration:underline">full list</a>.</p>';
+    return;
+  }
+  var theme=IV_COLORS[iv.group]||{c:'#0F766E',bg:'#A8D5CC40'};
+  var html='<div class="article-eyebrow" style="color:'+theme.c+'">'+esc(iv.group)+'</div>'+
+    '<h1 class="article-title">'+esc(iv.name)+'</h1>'+
+    '<p class="article-lede">'+esc(iv.summary)+'</p>';
+
+  html+='<div class="iv-detail-section"><div class="iv-detail-label">What it is</div>'+
+    '<p style="font-size:14px;line-height:1.7;color:#334155">'+iv.whatItIs+'</p></div>';
+
+  if(iv.whyOffered&&iv.whyOffered.length){
+    html+='<div class="iv-detail-section"><div class="iv-detail-label">Why it might be offered</div><ul style="padding-left:20px;margin:0">';
+    iv.whyOffered.forEach(function(w){html+='<li style="font-size:13.5px;line-height:1.65;color:#334155;margin-bottom:6px">'+esc(w)+'</li>';});
+    html+='</ul></div>';
+  }
+
+  if(iv.howDone&&iv.howDone.length){
+    html+='<div class="iv-detail-section"><div class="iv-detail-label">How it\'s done</div><ol style="list-style:none;padding:0;margin:0">';
+    iv.howDone.forEach(function(s,i){
+      html+='<li class="step-li" style="margin-bottom:10px"><span class="step-num" style="background:'+theme.bg+';color:'+theme.c+'">'+(i+1)+'</span>'+esc(s)+'</li>';
+    });
+    html+='</ol></div>';
+  }
+
+  if(iv.whatToExpect){
+    html+='<div class="iv-detail-section"><div class="iv-detail-label">What to expect</div>'+
+      '<p style="font-size:14px;line-height:1.7;color:#334155">'+esc(iv.whatToExpect)+'</p></div>';
+  }
+
+  if(iv.sideEffectsCommon&&iv.sideEffectsCommon.length){
+    html+='<div class="iv-detail-section"><div class="iv-detail-label">Common side effects</div>'+
+      '<div style="background:#F8FAFC;border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px">';
+    iv.sideEffectsCommon.forEach(function(s){
+      html+='<div class="pearl-item"><span style="color:'+theme.c+';font-size:12px;margin-top:2px">▸</span><span class="pearl-text">'+esc(s)+'</span></div>';
+    });
+    html+='</div></div>';
+  }
+
+  if(iv.sideEffectsSerious){
+    html+='<div class="caution-box"><div class="caution-label">⚠ Less common but serious</div>'+
+      '<div class="caution-text">'+iv.sideEffectsSerious+'</div></div>';
+  }
+
+  if(iv.questionsToAsk&&iv.questionsToAsk.length){
+    html+='<div class="iv-questions"><div class="iv-questions-label">Questions to ask your provider</div>'+
+      '<ul style="padding-left:18px;margin:0">';
+    iv.questionsToAsk.forEach(function(q){html+='<li>'+esc(q)+'</li>';});
+    html+='</ul></div>';
+  }
+
+  if(iv.source){
+    html+='<div class="evidence-block" style="border-left-color:'+theme.c+'">'+esc(iv.source)+'</div>';
+  }
+
+  document.getElementById('intervention-body').innerHTML=html;
+}
+
+// ─── ROUTER ───
+// Hash formats supported:
+//   ""                          → home
+//   "/"                         → home
+//   "/intro"                    → Intro to Labor
+//   "/active"                   → Active Labor (default state)
+//   "/active?d=4&e=60&..."      → Active Labor with state
+//   "/interventions"            → Interventions list
+//   "/interventions/<slug>"     → Single intervention
+//   "d=4&e=60&..." (LEGACY)     → Active Labor with state (old bookmarks)
+function parseRoute(){
+  var h=window.location.hash.slice(1); // strip leading #
+  if(!h)return {screen:'home'};
+  // Legacy format: no leading slash, contains state params
+  if(h.charAt(0)!=='/'){
+    if(/[?&]?(d|e|s|ep|fp|c)=/.test('&'+h)){
+      return {screen:'active',params:h,legacy:true};
+    }
+    return {screen:'home'};
+  }
+  // New /<route>(?<params>)? format
+  var rest=h.slice(1); // drop leading /
+  if(!rest)return {screen:'home'};
+  var qIdx=rest.indexOf('?');
+  var pathPart=qIdx>=0?rest.slice(0,qIdx):rest;
+  var paramsPart=qIdx>=0?rest.slice(qIdx+1):'';
+  var parts=pathPart.split('/');
+  var screen=parts[0];
+  var arg=parts[1]||null;
+  if(screen==='interventions'&&arg)screen='intervention';
+  if(['home','intro','active','interventions','intervention'].indexOf(screen)<0)screen='home';
+  return {screen:screen,arg:arg,params:paramsPart};
+}
+
+function applyRoute(){
+  if(window._routing)return; // avoid feedback from our own writeURL
+  var r=parseRoute();
+  window._currentRoute=r.screen;
+  // Show the matching screen
+  var screens=document.querySelectorAll('section.screen');
+  screens.forEach(function(s){s.classList.remove('active');});
+  var screenId='screen-'+r.screen;
+  var el=document.getElementById(screenId)||document.getElementById('screen-home');
+  el.classList.add('active');
+  // Header
+  var hdr=document.getElementById('header');
+  var titleEl=document.getElementById('header-title');
+  var subEl=document.getElementById('header-sub');
+  if(r.screen==='home'){
+    hdr.classList.remove('not-home');
+    titleEl.textContent='Labor Support Guide';
+    subEl.textContent='EVIDENCE-BASED PATIENT & PROVIDER REFERENCE';
+    document.title='Labor Support Guide';
+  } else {
+    hdr.classList.add('not-home');
+    if(r.screen==='intervention'){
+      var iv=null;for(var i=0;i<INTERVENTIONS.length;i++){if(INTERVENTIONS[i].slug===r.arg){iv=INTERVENTIONS[i];break;}}
+      titleEl.textContent=iv?iv.name:'Intervention';
+      subEl.textContent=(iv?iv.group:'').toUpperCase();
+      document.title=(iv?iv.name:'Intervention')+' · Labor Support Guide';
+    } else {
+      var titles={intro:'Intro to Labor',active:'Active Labor',interventions:'Common Questions & Interventions'};
+      var subs={intro:'For patients & families',active:'Evidence-based positioning & comfort',interventions:'Patient-facing reference'};
+      titleEl.textContent=titles[r.screen]||'Labor Support Guide';
+      subEl.textContent=(subs[r.screen]||'').toUpperCase();
+      document.title=(titles[r.screen]||'Labor Support Guide')+' · Labor Support Guide';
+    }
+  }
+  // Active labor: parse params (new or legacy) into S
+  if(r.screen==='active'&&r.params){
+    try{
+      var p=new URLSearchParams(r.params);
+      if(p.has('d'))S.dilation=+p.get('d');
+      if(p.has('e'))S.effacement=+p.get('e');
+      if(p.has('s'))S.station=+p.get('s');
+      if(p.has('ep'))S.ep=+p.get('ep');
+      if(p.has('fp'))S.fp=p.get('fp');
+      if(p.has('c'))S.cx=p.get('c');
+      document.getElementById('dil').value=S.dilation;
+      document.getElementById('eff').value=S.effacement;
+      document.getElementById('sta').value=S.station;
+      applyPillStates();
+      render();
+    }catch(e){}
+    // If legacy URL, upgrade it to the new format in place
+    if(r.legacy){
+      window._routing=true;
+      try{history.replaceState(null,'','#/active?'+r.params);}catch(e){}
+      window._routing=false;
+    }
+  }
+  // Screen-specific content
+  if(r.screen==='intro')renderIntroScreen();
+  if(r.screen==='interventions')renderInterventionsListScreen();
+  if(r.screen==='intervention')renderInterventionDetailScreen(r.arg);
+  // Scroll to top of new screen
+  window.scrollTo(0,0);
+}
+
+function goRoute(path){
+  window.location.hash=path;
+}
+
+function goBack(){
+  if(history.length>1){
+    history.back();
+  } else {
+    goRoute('/');
+  }
+}
+
+window.addEventListener('hashchange',applyRoute);
+
 // ─── INIT ───
-readURL();
-render();
-// Re-apply pill states from S after readURL
-(function(){
+applyRoute();   // determines screen + reads URL state if Active Labor
+render();       // populate Active Labor DOM even when hidden — ready on first click
+// Re-apply pill states from S (call after readURL or any state change from URL)
+function applyPillStates(){
   var fpColors={OA:'#059669',OP:'#EA580C',OT:'#7C3AED',asynclitic:'#2563EB'};
   var cxColors={mild:'#64748B',moderate:'#C2410C',strong:'#DC2626'};
   document.getElementById('pills-fp').querySelectorAll('.pill').forEach(function(b){
@@ -864,7 +1480,8 @@ render();
     b.classList.remove('active');b.style.borderColor='#E2E8F0';b.style.background='#fff';b.style.color='#64748B';
     if(v===S.cx){var c=cxColors[v];b.classList.add('active');b.style.borderColor=c;b.style.background=hex(c,0.08);b.style.color=c;}
   });
-})();
+}
+applyPillStates();
 </script>
 </body>
 </html>
