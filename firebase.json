@@ -1,10 +1,14 @@
 {
   "hosting": {
+    "target": "live",
     "public": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "CLAUDE.md",
+      "Labor App Icon.png",
+      "unruffled-proskuriakova-4f5f2c/**"
     ],
     "rewrites": [
       {

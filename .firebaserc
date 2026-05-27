@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "labor-app-mizzou"
+  },
+  "targets": {
+    "labor-app-mizzou": {
+      "hosting": {
+        "live": [
+          "labor-support-guide"
+        ]
+      }
+    }
   }
 }

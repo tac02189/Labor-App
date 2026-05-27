@@ -7,28 +7,32 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="Labor Guide"/>
-<meta name="theme-color" content="#ffffff"/>
+<meta name="theme-color" content="#A2ACC5"/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://mu-laborapp.web.app/">
+<meta property="og:url" content="https://labor-support-guide.web.app/">
 <meta property="og:title" content="Labor Support Guide">
 <meta property="og:description" content="Evidence-based positioning and comfort measures for labor support.">
-<meta property="og:image" content="https://mu-laborapp.web.app/og-image.png">
+<meta property="og:image" content="https://labor-support-guide.web.app/og-image.png">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://mu-laborapp.web.app/">
+<meta property="twitter:url" content="https://labor-support-guide.web.app/">
 <meta property="twitter:title" content="Labor Support Guide">
 <meta property="twitter:description" content="Evidence-based positioning and comfort measures for labor support.">
-<meta property="twitter:image" content="https://mu-laborapp.web.app/og-image.png">
+<meta property="twitter:image" content="https://labor-support-guide.web.app/og-image.png">
 
 <title>Labor Support Guide</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{color-scheme:light}
-html,body{background:#FAFAF7;color:#0F172A;font-family:ui-monospace,monospace;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+html,body{background:#FAFAF7;color:#0F172A;font-family:ui-monospace,monospace;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
 button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}a{text-decoration:none;-webkit-tap-highlight-color:transparent}
 input[type=range]{touch-action:manipulation}
@@ -40,14 +44,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 @keyframes toastUp{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
 
 /* Layout */
-#app{min-height:100vh}
+#app{min-height:100vh;min-height:100dvh}
 #header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #E5E7EB;padding:13px 20px;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right));display:flex;align-items:center;justify-content:space-between;gap:12px}
 #header h1{font-family:ui-serif,Georgia,serif;font-size:19px;font-weight:500;letter-spacing:-0.01em;color:#0F172A}
 #header-sub{font-size:10px;color:#94A3B8;letter-spacing:0.07em;margin-top:1px}
 
-.main-grid{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 60px)}
-.input-col{border-right:1px solid #E5E7EB;padding:20px 18px;background:#fff;overflow-y:auto;max-height:calc(100vh - 60px)}
-.recs-col{padding:28px 32px;overflow-y:auto;max-height:calc(100vh - 60px);background:#FAFAF7}
+.main-grid{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 60px);min-height:calc(100dvh - 60px)}
+.input-col{border-right:1px solid #E5E7EB;padding:20px 18px;background:#fff;overflow-y:auto;max-height:calc(100vh - 60px);max-height:calc(100dvh - 60px)}
+.recs-col{padding:28px 32px;overflow-y:auto;max-height:calc(100vh - 60px);max-height:calc(100dvh - 60px);background:#FAFAF7}
 
 /* Inputs */
 .param-label{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#64748B}
@@ -55,6 +59,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .param-val{font-family:ui-serif,Georgia,serif;font-size:20px;font-weight:700;color:#0F172A}
 .slider-wrap{position:relative;height:5px;background:#E2E8F0;border-radius:3px;margin:8px 0 4px}
 .slider-fill{position:absolute;left:0;top:0;height:100%;border-radius:3px;transition:width 0.12s;pointer-events:none}
+.slider-thumb{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #0F766E;box-shadow:0 1px 3px rgba(15,23,42,0.25);transform:translate(-50%,-50%);transition:left 0.12s,border-color 0.12s;pointer-events:none}
 .slider-wrap input{position:absolute;left:0;top:-8px;width:100%;opacity:0;height:20px;margin:0}
 .slider-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .slider-block{margin-bottom:20px}
@@ -76,7 +81,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 
 /* Side panel */
 #panel-backdrop{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.35);z-index:40;animation:fadeIn 0.2s}
-#side-panel{display:none;position:fixed;top:0;right:0;height:100vh;width:520px;background:#fff;border-left:1px solid #E5E7EB;z-index:50;overflow-y:auto;box-shadow:-12px 0 30px rgba(15,23,42,0.08);animation:slideIn 0.25s ease-out;flex-direction:column}
+#side-panel{display:none;position:fixed;top:0;right:0;height:100vh;height:100dvh;width:520px;background:#fff;border-left:1px solid #E5E7EB;z-index:50;overflow-y:auto;box-shadow:-12px 0 30px rgba(15,23,42,0.08);animation:slideIn 0.25s ease-out;flex-direction:column}
 #side-panel.open{display:flex}
 #panel-header{position:sticky;top:0;background:#fff;border-bottom:1px solid #E5E7EB;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:5;flex-shrink:0}
 #panel-close{width:34px;height:34px;border-radius:8px;border:1px solid #E5E7EB;background:#fff;font-size:16px;color:#64748B;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
@@ -161,6 +166,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
           </div>
           <div class="slider-wrap">
             <div class="slider-fill" id="dil-fill" style="background:linear-gradient(90deg,#0F766E,#0F766E)"></div>
+            <div class="slider-thumb" id="dil-thumb" style="left:40%"></div>
             <input type="range" min="0" max="10" step="1" value="4" id="dil" oninput="updateDilation(this.value)">
           </div>
         </div>
@@ -172,6 +178,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
           </div>
           <div class="slider-wrap">
             <div class="slider-fill" id="eff-fill" style="background:linear-gradient(90deg,#0F766E,#0F766E)"></div>
+            <div class="slider-thumb" id="eff-thumb" style="left:60%"></div>
             <input type="range" min="0" max="100" step="5" value="60" id="eff" oninput="updateEffacement(this.value)">
           </div>
         </div>
@@ -183,6 +190,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
           </div>
           <div class="slider-wrap">
             <div class="slider-fill" id="sta-fill" style="background:linear-gradient(90deg,#0F766E,#0F766E)"></div>
+            <div class="slider-thumb" id="sta-thumb" style="left:30%"></div>
             <input type="range" min="-5" max="5" step="1" value="-2" id="sta" oninput="updateStation(this.value)">
           </div>
         </div>
@@ -599,18 +607,24 @@ function render(){
   var dilPct=(S.dilation/10)*100;
   document.getElementById('dil-fill').style.width=dilPct+'%';
   document.getElementById('dil-fill').style.background='linear-gradient(90deg,#0F766E,'+rec.color+')';
+  document.getElementById('dil-thumb').style.left=dilPct+'%';
+  document.getElementById('dil-thumb').style.borderColor=rec.color;
   document.getElementById('dil-val').textContent=S.dilation+' cm';
   document.getElementById('dil-sub').textContent=S.dilation<6?'Latent phase':S.dilation<10?'Active phase':'Complete';
 
   var effPct=(S.effacement/100)*100;
   document.getElementById('eff-fill').style.width=effPct+'%';
   document.getElementById('eff-fill').style.background='linear-gradient(90deg,#0F766E,'+rec.color+')';
+  document.getElementById('eff-thumb').style.left=effPct+'%';
+  document.getElementById('eff-thumb').style.borderColor=rec.color;
   document.getElementById('eff-val').textContent=S.effacement+'%';
   document.getElementById('eff-sub').textContent=S.effacement<50?'Partially effaced':S.effacement<80?'Mostly effaced':'Fully effaced';
 
   var staPct=((S.station+5)/10)*100;
   document.getElementById('sta-fill').style.width=staPct+'%';
   document.getElementById('sta-fill').style.background='linear-gradient(90deg,#0F766E,'+rec.color+')';
+  document.getElementById('sta-thumb').style.left=staPct+'%';
+  document.getElementById('sta-thumb').style.borderColor=rec.color;
   document.getElementById('sta-val').textContent=S.station>0?'+'+S.station:''+S.station;
   document.getElementById('sta-sub').textContent=si.label;
 
