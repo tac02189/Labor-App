@@ -249,6 +249,14 @@ section.screen.active{display:block}
         </div>
         <div class="home-card-arrow">→</div>
       </button>
+      <button class="home-card" onclick="goRoute('/monitor')">
+        <div class="home-card-icon" style="background:#BFDBFE80;color:#2563EB">📈</div>
+        <div class="home-card-body">
+          <h2>Reading the Monitor</h2>
+          <p>What baby's heart-rate strip is showing — baseline, variability, accelerations, early/late/variable decelerations, and the three NICHD categories.</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </button>
       <button class="home-card" onclick="goRoute('/interventions')">
         <div class="home-card-icon" style="background:#FBCFE8AA;color:#9D174D">💉</div>
         <div class="home-card-body">
@@ -380,6 +388,11 @@ section.screen.active{display:block}
 
     </div>
   </div>
+  </section>
+
+  <!-- ─── Reading the Monitor screen ─── -->
+  <section id="screen-monitor" class="screen">
+    <div class="article-wrap" id="monitor-body"><!-- rendered by JS --></div>
   </section>
 
   <!-- ─── Interventions list screen ─── -->
@@ -1084,6 +1097,144 @@ function renderIntroScreen(){
   document.getElementById('intro-body').innerHTML=html;
 }
 
+// ─── READING THE MONITOR (content + diagrams) ───
+var MONITOR_ILLUS={
+  strip:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">'
+    +'<text x="20" y="14" font-size="10" font-family="monospace" font-weight="600" fill="#0F172A">Baby\'s heart rate (bpm)</text>'
+    +'<line x1="20" y1="32" x2="370" y2="32" stroke="#E5E7EB" stroke-dasharray="3 3"/><text x="372" y="35" font-size="9" fill="#94A3B8" font-family="monospace">160</text>'
+    +'<line x1="20" y1="88" x2="370" y2="88" stroke="#E5E7EB" stroke-dasharray="3 3"/><text x="372" y="91" font-size="9" fill="#94A3B8" font-family="monospace">110</text>'
+    +'<path d="M 20 60 q 6 -4 12 0 q 6 4 12 0 q 6 -4 12 0 q 6 4 12 0 q 6 -4 12 0 q 6 4 12 0 q 6 -4 12 0 q 6 4 12 0 L 170 60 C 195 60 205 36 225 36 C 245 36 255 60 280 60 q 6 -4 12 0 q 6 4 12 0 q 6 -4 12 0 q 6 4 12 0 q 6 -4 12 0 q 6 4 12 0 L 370 60" fill="none" stroke="#0F766E" stroke-width="2"/>'
+    +'<text x="225" y="28" text-anchor="middle" font-size="9" font-family="monospace" font-weight="600" fill="#0F766E">acceleration</text>'
+    +'<text x="95" y="78" text-anchor="middle" font-size="9" font-family="monospace" fill="#0F766E">moderate variability</text>'
+    +'<text x="20" y="115" font-size="10" font-family="monospace" font-weight="600" fill="#0F172A">Contractions</text>'
+    +'<line x1="20" y1="180" x2="370" y2="180" stroke="#E5E7EB"/>'
+    +'<path d="M 20 180 L 55 180 C 80 180 95 140 115 140 C 135 140 145 180 175 180 L 225 180 C 250 180 265 140 285 140 C 305 140 315 180 345 180 L 370 180" fill="#FED7AA60" stroke="#C2410C" stroke-width="1.5"/>'
+    +'</svg>',
+
+  decels:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 230">'
+    +'<text x="68" y="14" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="#0F766E">EARLY</text>'
+    +'<text x="195" y="14" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="#C2410C">LATE</text>'
+    +'<text x="325" y="14" text-anchor="middle" font-size="10" font-weight="700" font-family="monospace" fill="#9D174D">VARIABLE</text>'
+    +'<line x1="130" y1="22" x2="130" y2="215" stroke="#E5E7EB"/>'
+    +'<line x1="260" y1="22" x2="260" y2="215" stroke="#E5E7EB"/>'
+    /* EARLY panel */
+    +'<text x="14" y="44" font-size="8" font-family="monospace" fill="#94A3B8">FHR</text>'
+    +'<line x1="15" y1="55" x2="125" y2="55" stroke="#E5E7EB" stroke-dasharray="2 2"/>'
+    +'<path d="M 15 55 L 38 55 C 52 55 60 100 70 100 C 80 100 88 55 100 55 L 125 55" fill="none" stroke="#0F766E" stroke-width="2"/>'
+    +'<text x="14" y="138" font-size="8" font-family="monospace" fill="#94A3B8">TOCO</text>'
+    +'<line x1="15" y1="190" x2="125" y2="190" stroke="#E5E7EB"/>'
+    +'<path d="M 15 190 L 38 190 C 52 190 60 150 70 150 C 80 150 88 190 100 190 L 125 190" fill="#FED7AA50" stroke="#C2410C" stroke-width="1.5"/>'
+    +'<line x1="70" y1="100" x2="70" y2="150" stroke="#94A3B8" stroke-dasharray="2 2" stroke-width="0.8"/>'
+    +'<text x="68" y="210" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">head compression</text>'
+    /* LATE panel */
+    +'<line x1="140" y1="55" x2="255" y2="55" stroke="#E5E7EB" stroke-dasharray="2 2"/>'
+    +'<path d="M 140 55 L 170 55 C 190 55 200 100 210 100 C 220 100 230 55 250 55 L 255 55" fill="none" stroke="#C2410C" stroke-width="2"/>'
+    +'<line x1="140" y1="190" x2="255" y2="190" stroke="#E5E7EB"/>'
+    +'<path d="M 140 190 L 158 190 C 172 190 178 150 185 150 C 192 150 200 190 222 190 L 255 190" fill="#FED7AA50" stroke="#C2410C" stroke-width="1.5"/>'
+    +'<line x1="185" y1="150" x2="185" y2="165" stroke="#94A3B8" stroke-dasharray="2 2" stroke-width="0.8"/>'
+    +'<line x1="210" y1="100" x2="210" y2="115" stroke="#94A3B8" stroke-dasharray="2 2" stroke-width="0.8"/>'
+    +'<path d="M 185 165 L 210 165" stroke="#94A3B8" stroke-width="0.8" stroke-dasharray="2 2"/>'
+    +'<text x="197" y="158" text-anchor="middle" font-size="7" font-family="monospace" fill="#94A3B8">lag</text>'
+    +'<text x="195" y="210" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">placental insufficiency</text>'
+    /* VARIABLE panel */
+    +'<line x1="270" y1="55" x2="390" y2="55" stroke="#E5E7EB" stroke-dasharray="2 2"/>'
+    +'<path d="M 270 55 L 310 55 L 325 110 L 340 55 L 390 55" fill="none" stroke="#9D174D" stroke-width="2"/>'
+    +'<line x1="270" y1="190" x2="390" y2="190" stroke="#E5E7EB"/>'
+    +'<path d="M 270 190 L 290 190 C 305 190 313 165 325 165 C 337 165 345 190 360 190 L 390 190" fill="#FED7AA50" stroke="#C2410C" stroke-width="1.5"/>'
+    +'<text x="330" y="210" text-anchor="middle" font-size="8.5" font-family="monospace" fill="#475569">cord compression</text>'
+    +'</svg>'
+};
+
+var MONITOR_SECTIONS=[
+  {id:'what',title:'What the monitor shows',illusKey:'strip',body:
+    '<p>If you\'re on continuous fetal monitoring, two belts (or two internal sensors) produce two squiggly lines on a long strip of paper or screen:</p>'+
+    '<ul><li><strong>Top line — baby\'s heart rate</strong>, beat by beat (usually 110–160 bpm).</li>'+
+    '<li><strong>Bottom line — your contractions</strong>, shown as bumps.</li></ul>'+
+    '<p>Your provider reads both lines together. Most of the time the tracing looks reassuring; sometimes a pattern looks different and they want to take a closer look.</p>',
+    evidence:'ACOG Practice Bulletin No. 106: Intrapartum Fetal Heart Rate Monitoring (reaffirmed 2024). AWHONN: Fetal Heart Monitoring Principles and Practices, 6th ed.'},
+
+  {id:'baseline',title:'Baseline heart rate',body:
+    '<p>The <strong>baseline</strong> is baby\'s average heart rate over a 10-minute window, ignoring accelerations and decelerations. Normal is <strong>110 to 160 beats per minute</strong>.</p>'+
+    '<ul><li><strong>Below 110</strong> for 10 minutes or more — <em>bradycardia</em>.</li>'+
+    '<li><strong>Above 160</strong> for 10 minutes or more — <em>tachycardia</em>. Common causes include maternal fever, infection, or dehydration.</li></ul>',
+    evidence:'NICHD 2008 nomenclature — Macones et al., Obstet Gynecol 2008;112:661. Adopted by ACOG and AWHONN.'},
+
+  {id:'variability',title:'Variability — the squiggle',body:
+    '<p>A healthy heart rate isn\'t a flat line — it bounces around a little, beat to beat. The size of that bounce is called <strong>variability</strong>:</p>'+
+    '<ul><li><strong>Moderate variability</strong> (a 6–25 bpm bounce) is the single most reassuring thing on a tracing. It tells us baby\'s brain and heart are well-oxygenated.</li>'+
+    '<li><strong>Minimal variability</strong> (≤ 5 bpm) can mean baby is sleeping (often only 20–40 minutes) or, less commonly, that baby isn\'t getting enough oxygen.</li>'+
+    '<li><strong>Absent variability</strong> (flat line) is concerning.</li>'+
+    '<li><strong>Marked variability</strong> (> 25 bpm) is uncommon and usually well-tolerated.</li></ul>',
+    evidence:'NICHD 2008 (Macones et al.). ACOG Practice Bulletin No. 106.'},
+
+  {id:'accels',title:'Accelerations — the good bumps',body:
+    '<p>An <strong>acceleration</strong> is a brief jump up in baby\'s heart rate — at term, at least <strong>15 bpm above baseline</strong> for at least <strong>15 seconds</strong>. They often happen when baby moves or kicks.</p>'+
+    '<p>Accelerations are <strong>reassuring</strong>. Their presence means baby is well-oxygenated. Their absence isn\'t necessarily bad — but providers like to see at least a few during a tracing.</p>',
+    evidence:'NICHD 2008. Before 32 weeks, the threshold is 10 bpm for 10 seconds.'},
+
+  {id:'early',title:'Early decelerations',illusKey:'decels',body:
+    '<p>An <strong>early deceleration</strong> is a slow, U-shaped dip in baby\'s heart rate that <strong>mirrors</strong> a contraction — it starts when the contraction starts, hits its lowest point at the peak, and returns to baseline as the contraction ends.</p>'+
+    '<p><strong>Cause:</strong> Brief compression of baby\'s head during the contraction stimulates the vagus nerve, which slows the heart for a few seconds.</p>'+
+    '<p><strong>What it means:</strong> Benign. Often a sign baby is descending. No intervention needed.</p>',
+    evidence:'NICHD 2008. ACOG Practice Bulletin No. 116: Management of Intrapartum Fetal Heart Rate Tracings.'},
+
+  {id:'late',title:'Late decelerations',body:
+    '<p>A <strong>late deceleration</strong> is a slow, U-shaped dip whose lowest point comes <strong>after</strong> the peak of the contraction — the dip is "late."</p>'+
+    '<p><strong>Cause:</strong> The placenta isn\'t delivering enough oxygen during contractions (<em>uteroplacental insufficiency</em>). Common reasons: maternal low blood pressure (often after an epidural), tachysystole from Pitocin, placental disease, or hypertensive disorders.</p>'+
+    '<p><strong>What it means:</strong> Always taken seriously, especially if recurrent or with minimal/absent variability. Triggers immediate intervention.</p>',
+    evidence:'NICHD 2008. ACOG Practice Bulletin No. 116.'},
+
+  {id:'variable',title:'Variable decelerations',body:
+    '<p>A <strong>variable deceleration</strong> is an <strong>abrupt</strong>, V- or W-shaped drop — sharp down, sharp back up. It can happen with or without a contraction.</p>'+
+    '<p><strong>Cause:</strong> Compression of the umbilical cord — common after the water breaks or in babies with less amniotic fluid.</p>'+
+    '<p><strong>What it means:</strong> Common and often well-tolerated. Concerning when they become deep (&lt; 70 bpm), prolonged (&gt; 60 seconds), or repetitive with every contraction. Position changes often relieve them.</p>',
+    evidence:'NICHD 2008. ACOG PB 116. Amnioinfusion reduces recurrent variables — Hofmeyr & Lawrie, Cochrane Review 2012.'},
+
+  {id:'prolonged',title:'Prolonged decelerations',body:
+    '<p>A <strong>prolonged deceleration</strong> is a drop of at least 15 bpm lasting longer than <strong>2 minutes</strong> (but less than 10 — past 10 minutes it becomes a new baseline or bradycardia).</p>'+
+    '<p><strong>Cause:</strong> Many — sudden cord compression, maternal hypotension, rapid descent of baby, uterine rupture, placental abruption.</p>'+
+    '<p><strong>What it means:</strong> A "call-the-team" event. Providers move quickly — reposition, fluids, stop Pitocin, cervical exam to rule out cord prolapse. If it doesn\'t recover, plans for delivery are made.</p>',
+    evidence:'NICHD 2008. ACOG Practice Bulletin No. 116.'},
+
+  {id:'categories',title:'The three categories',body:
+    '<p>Providers group tracings into three formal categories:</p>'+
+    '<div class="urgency-tier" style="background:#DCFCE7;border-color:#86EFAC"><span class="dot" style="background:#16A34A"></span><div><strong style="color:#14532D">Category I — normal</strong>Baseline 110–160, moderate variability, no late or variable decels. Reassuring; routine monitoring continues. Most tracings most of the time.</div></div>'+
+    '<div class="urgency-tier" style="background:#FEF3C7;border-color:#FCD34D"><span class="dot" style="background:#D97706"></span><div><strong style="color:#92400E">Category II — indeterminate</strong>Anything not clearly Category I or III. Common (most labors will have a Category II window at some point). Providers watch closely and intervene if patterns worsen.</div></div>'+
+    '<div class="urgency-tier" style="background:#FEE2E2;border-color:#FCA5A5"><span class="dot" style="background:#DC2626"></span><div><strong style="color:#991B1B">Category III — abnormal</strong>Absent variability with recurrent late or recurrent variable decelerations, or bradycardia — or a sinusoidal pattern. Requires urgent action; if not resolved, often leads to operative delivery.</div></div>',
+    evidence:'NICHD 2008 three-tier system. Adopted by ACOG Practice Bulletin No. 106 (2009, reaffirmed 2024).'},
+
+  {id:'interventions',title:'What we do when the tracing looks off',body:
+    '<p>For a Category II or worsening tracing, the first-line steps are quick, low-risk, and often resolve the issue:</p>'+
+    '<ul><li><strong>Reposition</strong> — usually left side, sometimes hands-and-knees, to take pressure off the cord.</li>'+
+    '<li><strong>IV fluid bolus</strong> — improves placental perfusion.</li>'+
+    '<li><strong>Pause or reduce Pitocin</strong> if it\'s running.</li>'+
+    '<li><strong>Cervical exam</strong> — rule out cord prolapse, check progress.</li>'+
+    '<li><strong>Internal fetal scalp electrode</strong> for a clearer tracing.</li>'+
+    '<li><strong>Amnioinfusion</strong> — warm sterile fluid through a uterine catheter to cushion the cord — for recurrent variable decelerations.</li></ul>'+
+    '<p>If Category III persists despite these maneuvers, the team moves toward delivery — operative vaginal birth if delivery is imminent, otherwise cesarean.</p>'+
+    '<p><strong>About maternal oxygen:</strong> for many years, supplemental O₂ was given routinely for non-reassuring tracings. Current evidence does not support routine use; some studies show no benefit, and there is low-quality evidence of possible harm.</p>',
+    evidence:'ACOG Practice Bulletin No. 116. Raghuraman et al., Am J Obstet Gynecol 2021: no clear benefit of intrapartum maternal O₂ for non-reassuring tracings.'}
+];
+
+function renderMonitorScreen(){
+  var html='<div class="article-eyebrow">Patient &amp; provider reference</div>'+
+    '<h1 class="article-title">Reading the Monitor</h1>'+
+    '<p class="article-lede">A plain-language guide to baby\'s heart-rate strip — baseline, variability, accelerations, the three decel patterns (early, late, variable), and what the categories mean. Reviewed against ACOG/AWHONN/NICHD nomenclature.</p>';
+  MONITOR_SECTIONS.forEach(function(s){
+    html+='<div class="article-section" id="monitor-'+s.id+'">';
+    html+='<h2>'+esc(s.title)+'</h2>';
+    if(s.illusKey&&MONITOR_ILLUS[s.illusKey]){
+      html+='<div class="article-illus">'+MONITOR_ILLUS[s.illusKey]+'</div>';
+    }
+    html+=s.body;
+    if(s.evidence){
+      html+='<div class="evidence-block" style="border-left-color:#2563EB;margin-top:14px">'+esc(s.evidence)+'</div>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('monitor-body').innerHTML=html;
+}
+
 // ─── INTERVENTIONS (content + render) ───
 var INTERVENTION_GROUPS=['Cervical ripening','Membrane management','Labor augmentation','Pain management','Monitoring','Operative delivery'];
 
@@ -1352,6 +1503,7 @@ function renderInterventionDetailScreen(slug){
 //   "/intro"                    → Intro to Labor
 //   "/active"                   → Active Labor (default state)
 //   "/active?d=4&e=60&..."      → Active Labor with state
+//   "/monitor"                  → Reading the Monitor (FHR patterns)
 //   "/interventions"            → Interventions list
 //   "/interventions/<slug>"     → Single intervention
 //   "d=4&e=60&..." (LEGACY)     → Active Labor with state (old bookmarks)
@@ -1375,7 +1527,7 @@ function parseRoute(){
   var screen=parts[0];
   var arg=parts[1]||null;
   if(screen==='interventions'&&arg)screen='intervention';
-  if(['home','intro','active','interventions','intervention'].indexOf(screen)<0)screen='home';
+  if(['home','intro','active','monitor','interventions','intervention'].indexOf(screen)<0)screen='home';
   return {screen:screen,arg:arg,params:paramsPart};
 }
 
@@ -1406,8 +1558,8 @@ function applyRoute(){
       subEl.textContent=(iv?iv.group:'').toUpperCase();
       document.title=(iv?iv.name:'Intervention')+' · Labor Support Guide';
     } else {
-      var titles={intro:'Intro to Labor',active:'Active Labor',interventions:'Common Questions & Interventions'};
-      var subs={intro:'For patients & families',active:'Evidence-based positioning & comfort',interventions:'Patient-facing reference'};
+      var titles={intro:'Intro to Labor',active:'Active Labor',monitor:'Reading the Monitor',interventions:'Common Questions & Interventions'};
+      var subs={intro:'For patients & families',active:'Evidence-based positioning & comfort',monitor:'Patterns, decelerations, categories',interventions:'Patient-facing reference'};
       titleEl.textContent=titles[r.screen]||'Labor Support Guide';
       subEl.textContent=(subs[r.screen]||'').toUpperCase();
       document.title=(titles[r.screen]||'Labor Support Guide')+' · Labor Support Guide';
@@ -1438,6 +1590,7 @@ function applyRoute(){
   }
   // Screen-specific content
   if(r.screen==='intro')renderIntroScreen();
+  if(r.screen==='monitor')renderMonitorScreen();
   if(r.screen==='interventions')renderInterventionsListScreen();
   if(r.screen==='intervention')renderInterventionDetailScreen(r.arg);
   // Scroll to top of new screen
