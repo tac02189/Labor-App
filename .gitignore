@@ -9,3 +9,12 @@ Thumbs.db
 # Local Claude instructions
 CLAUDE.md
 .claude/
+
+# Env / secrets — never commit (portfolio standard, root CLAUDE.md)
+.env
+.env.*
+*.env
+*service-account*.json
+*-service-account.json
+firebase-adminsdk*.json
+secrets/
