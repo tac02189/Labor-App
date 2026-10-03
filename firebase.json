@@ -6,6 +6,7 @@
       "ignore": [
         "firebase.json",
         "**/.*",
+        "**/.*/**",
         "**/node_modules/**",
         "CLAUDE.md",
         "Labor App Icon.png",
@@ -24,6 +25,7 @@
       "ignore": [
         "firebase.json",
         "**/.*",
+        "**/.*/**",
         "**/node_modules/**",
         "CLAUDE.md",
         "Labor App Icon.png",
