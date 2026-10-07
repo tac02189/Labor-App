@@ -6,9 +6,10 @@ firebase-debug.log*
 .DS_Store
 Thumbs.db
 
-# Local Claude instructions
+# Local Claude instructions — CLAUDE.md stays local; the preview config and server are tracked
+# (root CLAUDE.md → Rule 3), only the per-machine permissions file is not
 CLAUDE.md
-.claude/
+.claude/settings.local.json
 
 # Env / secrets — never commit (portfolio standard, root CLAUDE.md)
 .env

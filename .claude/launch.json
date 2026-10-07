@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "labor-app",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        ".claude/serve.js",
+        "../Labor App",
+        "8764"
+      ],
+      "port": 8764
+    },
+    {
+      "name": "labor-app-dev",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        ".claude/serve.js",
+        "../Labor App-dev",
+        "8765"
+      ],
+      "port": 8765
+    }
+  ]
+}
