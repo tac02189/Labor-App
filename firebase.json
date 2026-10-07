@@ -9,8 +9,7 @@
         "**/.*/**",
         "**/node_modules/**",
         "CLAUDE.md",
-        "Labor App Icon.png",
-        "unruffled-proskuriakova-4f5f2c/**"
+        "Labor App Icon.png"
       ],
       "rewrites": [
         {
@@ -28,8 +27,7 @@
         "**/.*/**",
         "**/node_modules/**",
         "CLAUDE.md",
-        "Labor App Icon.png",
-        "unruffled-proskuriakova-4f5f2c/**"
+        "Labor App Icon.png"
       ],
       "rewrites": [
         {
